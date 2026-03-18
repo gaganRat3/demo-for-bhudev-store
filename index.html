@@ -2,113 +2,365 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Servify - Your Marketplace for Services</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Servify - Your marketplace for professional services">
+    <meta name="theme-color" content="#2874f0">
+    <title>Servify - Book Professional Services Online</title>
+    
+    <!-- Critical CSS inline for faster perceived load -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Roboto', sans-serif;
         }
-
+        
+        html { font-size: 16px; scroll-behavior: smooth; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; }
+    </style>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
         :root {
             --primary: #2874f0;
             --secondary: #fb641b;
+            --tertiary: #388e3c;
             --dark: #172b4d;
             --light: #f2f2f2;
             --gray: #878787;
+            --gray-light: #f5f5f5;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.12);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.15);
+            --radius: 8px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Navbar Styles */
+        /* Typography - Mobile First */
+        html { font-size: 16px; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            color: var(--dark);
+            background: #fff;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1 { font-size: 1.75rem; font-weight: 700; line-height: 1.2; }
+        h2 { font-size: 1.5rem; font-weight: 700; line-height: 1.2; }
+        h3 { font-size: 1.25rem; font-weight: 600; line-height: 1.3; }
+        h4 { font-size: 1rem; font-weight: 600; }
+        p { font-size: 0.95rem; color: var(--gray); }
+        
+        @media (min-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            h3 { font-size: 1.5rem; }
+        }
+
+        /* Buttons - Touch Friendly */
+        button, a.btn {
+            min-height: 44px;
+            min-width: 44px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            background: #1e5dc9;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .btn-secondary:hover:not(:disabled) {
+            background: #e55a17;
+        }
+
+        /* Navbar - Mobile First */
         .navbar {
-            background: linear-gradient(135deg, var(--primary) 0%, #1e5dc9 100%);
+            background: linear-gradient(135deg, var(--primary), #1e5dc9);
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-sm);
+            padding: 12px 16px;
         }
 
-        .search-bar {
+        .navbar-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .navbar-brand-logo {
+            width: 40px;
+            height: 40px;
             background: white;
-            border-radius: 4px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .navbar-tagline {
+            display: none;
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.8);
+        }
+
+        @media (min-width: 768px) {
+            .navbar-tagline { display: block; }
+        }
+
+        /* Search bar */
+        .search-bar {
+            flex: 1;
+            max-width: 400px;
+            display: flex;
+            background: white;
+            border-radius: 6px;
             overflow: hidden;
         }
 
         .search-bar input {
-            outline: none;
+            flex: 1;
             border: none;
-            padding: 10px 16px;
-            width: 500px;
+            padding: 10px 12px;
             font-size: 14px;
+            outline: none;
         }
 
         .search-bar button {
-            background: #e3e9f2;
+            background: #f5f5f5;
             border: none;
-            padding: 10px 20px;
+            padding: 10px 14px;
             cursor: pointer;
-            transition: background 0.3s;
+            color: var(--primary);
+            transition: var(--transition);
         }
 
         .search-bar button:hover {
-            background: #d4dbe6;
+            background: #eee;
         }
 
-        /* Category Menu */
-        .category-menu {
-            background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-        }
-
-        .category-item {
-            position: relative;
+        /* Hamburger Menu */
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
             cursor: pointer;
+            padding: 8px;
+            margin-left: -8px;
         }
 
-        .category-item:hover .submenu {
-            display: block;
-        }
-
-        .submenu {
-            display: none;
-            position: absolute;
-            left: 100%;
-            top: 0;
+        .hamburger span {
+            width: 24px;
+            height: 2px;
             background: white;
-            min-width: 200px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            border-radius: 4px;
-            z-index: 100;
+            border-radius: 2px;
+            transition: var(--transition);
         }
 
-        .submenu a {
-            display: block;
-            padding: 10px 16px;
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            position: absolute;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            box-shadow: var(--shadow-md);
+            z-index: 999;
+        }
+
+        .mobile-menu.active {
+            max-height: 500px;
+        }
+
+        .mobile-menu-content {
+            padding: 16px;
+        }
+
+        .mobile-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
             color: var(--dark);
             text-decoration: none;
-            transition: background 0.3s;
+            transition: var(--transition);
         }
 
-        .submenu a:hover {
-            background: #f0f4ff;
+        .mobile-menu-item:hover {
             color: var(--primary);
         }
 
-        /* Banner Slider */
+        .mobile-menu-item i {
+            font-size: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .hamburger { display: none; }
+            .mobile-menu { display: none !important; }
+        }
+
+        /* Desktop nav links */
+        .navbar-links {
+            display: none;
+            gap: 20px;
+            color: white;
+            font-size: 0.95rem;
+        }
+
+        .navbar-links-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: var(--transition);
+        }
+
+        .navbar-links-item:hover {
+            transform: translateX(-2px);
+        }
+
+        .navbar-links-item.icon-only {
+            position: relative;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        @media (min-width: 768px) {
+            .navbar-links { display: flex; }
+        }
+
+        /* Category Menu - Hidden on mobile */
+        .category-menu {
+            display: none;
+            background: white;
+            border-bottom: 1px solid #eee;
+            padding: 0;
+        }
+
+        @media (min-width: 1024px) {
+            .category-menu { display: block; }
+        }
+
+        .category-menu-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .category-menu-scroll::-webkit-scrollbar { display: none; }
+
+        .category-list {
+            display: flex;
+            gap: 0;
+            padding: 0;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .category-item {
+            flex: 1;
+            min-width: 140px;
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+            white-space: nowrap;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .category-item:hover,
+        .category-item.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* Banner Slider - Mobile First */
         .banner-slider {
             position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
             overflow: hidden;
-            height: 320px;
+            background: linear-gradient(135deg, var(--primary), #1e5dc9);
         }
 
         .slides {
             display: flex;
-            transition: transform 0.5s ease-in-out;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             height: 100%;
         }
 
@@ -116,6 +368,9 @@
             min-width: 100%;
             height: 100%;
             position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .slide img {
@@ -126,286 +381,337 @@
 
         .slide-content {
             position: absolute;
-            top: 50%;
-            left: 10%;
-            transform: translateY(-50%);
+            left: 16px;
+            right: 16px;
             color: white;
-            z-index: 10;
+            text-align: left;
+            max-width: 500px;
+        }
+
+        .slide-content h2 {
+            margin-bottom: 12px;
+            font-size: 1.5rem;
+        }
+
+        .slide-content p {
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+        }
+
+        @media (min-width: 768px) {
+            .banner-slider { aspect-ratio: 16 / 6; }
+            .slide-content h2 { font-size: 2.5rem; }
+            .slide-content p { font-size: 1.1rem; }
         }
 
         .slider-nav {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(255,255,255,0.8);
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.9);
             border: none;
-            width: 50px;
-            height: 80px;
+            border-radius: 50%;
             cursor: pointer;
-            z-index: 20;
-            transition: all 0.3s;
+            z-index: 10;
             display: flex;
             align-items: center;
             justify-content: center;
+            color: var(--dark);
+            transition: var(--transition);
         }
 
         .slider-nav:hover {
             background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            box-shadow: var(--shadow-md);
         }
 
-        .slider-nav.prev { left: 10px; border-radius: 0 4px 4px 0; }
-        .slider-nav.next { right: 10px; border-radius: 4px 0 0 4px; }
+        .slider-nav.prev { left: 12px; }
+        .slider-nav.next { right: 12px; }
 
         .slider-dots {
             position: absolute;
-            bottom: 20px;
+            bottom: 16px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             gap: 8px;
-            z-index: 20;
+            z-index: 10;
         }
 
         .dot {
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
             background: rgba(255,255,255,0.5);
             cursor: pointer;
-            transition: all 0.3s;
+            transition: var(--transition);
         }
 
         .dot.active {
             background: white;
-            transform: scale(1.2);
+            width: 28px;
+            border-radius: 5px;
         }
 
-        /* Service Categories Grid */
-        .service-categories {
+        /* Section Layout - Mobile First */
+        .section {
+            padding: 20px 16px;
+        }
+
+        @media (min-width: 768px) {
+            .section { padding: 40px 20px; }
+        }
+
+        .section-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .section-title-group h2 {
+            margin-bottom: 4px;
+        }
+
+        .section-title-group p {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .section-action {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+            color: var(--primary);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        /* Service Categories Grid - Mobile First */
+        .categories-grid {
             display: grid;
-            grid-template-columns: repeat(10, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 1px;
-            background: #e2e8f0;
+            background: #e8e8e8;
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        @media (min-width: 640px) {
+            .categories-grid { grid-template-columns: repeat(5, 1fr); }
+        }
+
+        @media (min-width: 1024px) {
+            .categories-grid { grid-template-columns: repeat(10, 1fr); }
         }
 
         .category-card {
             background: white;
-            padding: 20px 10px;
+            padding: 16px 12px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
         }
 
         .category-card:hover {
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transform: translateY(-3px);
+            background: var(--gray-light);
+            transform: scale(1.02);
         }
 
         .category-card i {
-            font-size: 36px;
-            margin-bottom: 10px;
+            font-size: 24px;
+            margin-bottom: 8px;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .category-card h3 {
-            font-size: 13px;
-            color: var(--dark);
-            font-weight: 500;
+        .category-card h4 {
+            font-size: 0.8rem;
+            word-break: break-word;
+            line-height: 1.2;
         }
 
-        /* Deals Section */
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 20px;
-            background: white;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .section-title {
-            font-size: 22px;
-            font-weight: 600;
-            color: var(--dark);
-        }
-
-        .view-all {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .view-all:hover {
-            text-decoration: underline;
-        }
-
+        /* Service Cards - Mobile First */
         .services-scroll {
             display: flex;
             overflow-x: auto;
-            padding: 20px;
-            gap: 16px;
+            gap: 12px;
+            -webkit-overflow-scrolling: touch;
+            padding: 16px 0;
             scrollbar-width: none;
-            -ms-overflow-style: none;
         }
 
-        .services-scroll::-webkit-scrollbar {
-            display: none;
-        }
+        .services-scroll::-webkit-scrollbar { display: none; }
 
-        /* Service Card */
         .service-card {
-            min-width: 240px;
+            flex: 0 0 calc(100% - 12px);
             background: white;
-            border-radius: 8px;
+            border-radius: var(--radius);
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            transition: all 0.3s;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
             cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (min-width: 640px) {
+            .service-card { flex: 0 0 calc(50% - 6px); }
+        }
+
+        @media (min-width: 1024px) {
+            .service-card { flex: 0 0 calc(25% - 9px); }
         }
 
         .service-card:hover {
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
         }
 
         .service-image {
-            height: 160px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            aspect-ratio: 1 / 1;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
             overflow: hidden;
-        }
-
-        .service-image i {
-            font-size: 60px;
             color: white;
-            opacity: 0.9;
+            font-size: 48px;
         }
 
         .service-badge {
             position: absolute;
-            top: 10px;
-            left: 10px;
+            top: 8px;
+            left: 8px;
             background: var(--secondary);
             color: white;
             padding: 4px 8px;
-            font-size: 11px;
+            font-size: 0.75rem;
             border-radius: 4px;
-            font-weight: 600;
+            font-weight: 700;
         }
 
-        .service-discount {
+        .service-price-tag {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 8px;
+            right: 8px;
             background: rgba(0,0,0,0.7);
             color: white;
             padding: 4px 8px;
-            font-size: 11px;
             border-radius: 4px;
+            font-size: 0.75rem;
         }
 
         .service-info {
+            flex: 1;
             padding: 12px;
+            display: flex;
+            flex-direction: column;
         }
 
         .service-title {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--dark);
-            margin-bottom: 6px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            line-height: 1.3;
         }
 
         .service-provider {
-            font-size: 12px;
-            color: var(--gray);
+            font-size: 0.8rem;
+            color: #999;
             margin-bottom: 8px;
         }
 
         .service-rating {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
             margin-bottom: 8px;
+            font-size: 0.8rem;
         }
 
         .rating-badge {
-            background: #388e3c;
+            background: var(--tertiary);
             color: white;
             padding: 2px 6px;
-            font-size: 11px;
-            border-radius: 4px;
-            display: flex;
+            border-radius: 3px;
+            display: inline-flex;
             align-items: center;
             gap: 2px;
         }
 
-        .rating-count {
-            font-size: 11px;
-            color: var(--gray);
-        }
-
         .service-price {
+            margin-top: auto;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .current-price {
-            font-size: 16px;
+        .price-current {
             font-weight: 700;
+            font-size: 1rem;
             color: var(--dark);
         }
 
-        .original-price {
-            font-size: 12px;
-            color: var(--gray);
+        .price-original {
+            font-size: 0.8rem;
+            color: #999;
             text-decoration: line-through;
         }
 
-        .free-service {
-            font-size: 11px;
-            color: #388e3c;
-            font-weight: 500;
-        }
-
-        /* Articles Section */
+        /* Articles Grid - Mobile First */
         .articles-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            padding: 24px;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 768px) {
+            .articles-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (min-width: 1024px) {
+            .articles-grid { grid-template-columns: repeat(3, 1fr); }
         }
 
         .article-card {
             background: white;
-            border-radius: 12px;
+            border-radius: var(--radius);
             overflow: hidden;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            transition: all 0.3s;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
             cursor: pointer;
+            display: flex;
+            flex-direction: column;
         }
 
         .article-card:hover {
-            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
         }
 
         .article-image {
-            height: 200px;
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            aspect-ratio: 16 / 10;
+            background: linear-gradient(135deg, #11998e, #38ef7d);
             position: relative;
             overflow: hidden;
         }
@@ -416,95 +722,143 @@
             object-fit: cover;
         }
 
-        .article-category {
+        .article-tag {
             position: absolute;
-            top: 16px;
-            left: 16px;
+            top: 12px;
+            left: 12px;
             background: var(--primary);
             color: white;
-            padding: 6px 12px;
-            font-size: 11px;
+            padding: 4px 12px;
+            font-size: 0.75rem;
             border-radius: 20px;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .article-content {
-            padding: 20px;
+            flex: 1;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
         }
 
         .article-title {
-            font-size: 18px;
+            font-size: 1.1rem;
             font-weight: 600;
-            color: var(--dark);
-            margin-bottom: 12px;
-            line-height: 1.4;
+            margin-bottom: 8px;
+            line-height: 1.3;
         }
 
         .article-excerpt {
-            font-size: 14px;
-            color: var(--gray);
-            line-height: 1.6;
-            margin-bottom: 16px;
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 12px;
+            flex: 1;
         }
 
         .article-meta {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding-top: 16px;
+            padding-top: 12px;
             border-top: 1px solid #eee;
+            font-size: 0.8rem;
         }
 
         .article-author {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
-        .author-avatar {
-            width: 36px;
-            height: 36px;
+        .article-author-avatar {
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 14px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
         }
 
-        .author-name {
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--dark);
+        /* Trust Badges - Mobile First */
+        .trust-badges {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            padding: 20px 16px;
+            background: #f0f6ff;
         }
 
-        .read-time {
-            font-size: 12px;
-            color: var(--gray);
+        @media (min-width: 640px) {
+            .trust-badges { grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 40px 20px; }
         }
 
-        /* Footer */
+        .badge-item {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .badge-icon {
+            width: 56px;
+            height: 56px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-sm);
+            color: var(--primary);
+            font-size: 24px;
+        }
+
+        @media (min-width: 640px) {
+            .badge-icon { width: 72px; height: 72px; font-size: 32px; }
+        }
+
+        .badge-text h4 {
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+
+        .badge-text p {
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        /* Footer - Mobile First */
         footer {
-            background: #172b4d;
+            background: var(--dark);
             color: white;
-            margin-top: 60px;
+            margin-top: 40px;
         }
 
         .footer-top {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
-            gap: 40px;
-            padding: 50px 60px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            grid-template-columns: 1fr;
+            gap: 32px;
+            padding: 32px 16px;
+        }
+
+        @media (min-width: 768px) {
+            .footer-top { grid-template-columns: repeat(2, 1fr); gap: 40px; padding: 50px 20px; }
+        }
+
+        @media (min-width: 1024px) {
+            .footer-top { grid-template-columns: repeat(5, 1fr); }
         }
 
         .footer-section h4 {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: #fff;
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+            color: white;
         }
 
         .footer-section ul {
@@ -516,38 +870,61 @@
         }
 
         .footer-section ul li a {
-            color: #9497a1;
+            color: rgba(255,255,255,0.7);
             text-decoration: none;
-            font-size: 13px;
-            transition: color 0.3s;
+            font-size: 0.9rem;
+            transition: var(--transition);
         }
 
         .footer-section ul li a:hover {
             color: white;
+            padding-left: 4px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .footer-brand-logo {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
         }
 
         .footer-about p {
-            color: #9497a1;
-            font-size: 13px;
-            line-height: 1.8;
-            margin-bottom: 20px;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 16px;
         }
 
         .social-links {
             display: flex;
             gap: 12px;
+            flex-wrap: wrap;
         }
 
         .social-links a {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             background: rgba(255,255,255,0.1);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            transition: all 0.3s;
+            transition: var(--transition);
         }
 
         .social-links a:hover {
@@ -555,45 +932,47 @@
             transform: translateY(-3px);
         }
 
-        .newsletter {
+        .newsletter-section {
             background: rgba(255,255,255,0.05);
-            padding: 24px;
-            border-radius: 8px;
+            padding: 16px;
+            border-radius: var(--radius);
         }
 
-        .newsletter h4 {
+        .newsletter-section p {
+            font-size: 0.85rem;
             margin-bottom: 12px;
+            color: rgba(255,255,255,0.8);
         }
 
         .newsletter-form {
             display: flex;
-            gap: 8px;
-            margin-top: 16px;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .newsletter-form input {
-            flex: 1;
-            padding: 12px 16px;
+            padding: 10px 12px;
             border: none;
             border-radius: 4px;
             background: rgba(255,255,255,0.1);
             color: white;
-            outline: none;
+            font-size: 0.9rem;
         }
 
         .newsletter-form input::placeholder {
-            color: #9497a1;
+            color: rgba(255,255,255,0.6);
         }
 
         .newsletter-form button {
             background: var(--secondary);
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 10px 16px;
             border-radius: 4px;
-            cursor: pointer;
             font-weight: 600;
-            transition: background 0.3s;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
         }
 
         .newsletter-form button:hover {
@@ -601,143 +980,36 @@
         }
 
         .footer-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 60px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 20px 16px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.6);
         }
 
-        .copyright {
-            color: #9497a1;
-            font-size: 13px;
-        }
-
-        .payment-methods {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .payment-methods span {
-            color: #9497a1;
-            font-size: 12px;
-        }
-
-        .payment-icons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .payment-icons i {
-            font-size: 24px;
-            color: #9497a1;
-        }
-
-        /* Mobile Responsiveness */
-        @media (max-width: 1200px) {
-            .service-categories {
-                grid-template-columns: repeat(5, 1fr);
-            }
-        }
-
-        @media (max-width: 992px) {
-            .footer-top {
-                grid-template-columns: repeat(2, 1fr);
-                padding: 40px 30px;
-            }
-            
-            .articles-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .search-bar input {
-                width: 200px;
-            }
-            
-            .banner-slider {
-                height: 200px;
-            }
-            
-            .service-categories {
-                grid-template-columns: repeat(5, 1fr);
-            }
-            
-            .category-card i {
-                font-size: 28px;
-            }
-            
-            .category-card h3 {
-                font-size: 11px;
-            }
-            
-            .footer-top {
-                grid-template-columns: 1fr;
-            }
-            
-            .articles-grid {
-                grid-template-columns: 1fr;
-            }
-            
+        @media (min-width: 768px) {
             .footer-bottom {
-                flex-direction: column;
-                gap: 20px;
+                display: flex;
+                justify-content: space-between;
+                text-align: left;
                 padding: 20px;
-                text-align: center;
-            }
-            
-            .slide-content h2 {
-                font-size: 24px !important;
-            }
-            
-            .slide-content p {
-                font-size: 14px !important;
             }
         }
 
-        @media (max-width: 480px) {
-            .search-bar input {
-                width: 150px;
-            }
-            
-            .service-categories {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            
-            .service-card {
-                min-width: 200px;
-            }
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate-in {
-            animation: fadeInUp 0.6s ease-out forwards;
-        }
-
-        /* Quick View Modal styles */
+        /* Modals - Mobile First */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
             display: none;
             align-items: center;
             justify-content: center;
             z-index: 2000;
+            padding: 16px;
+            backdrop-filter: blur(4px);
         }
 
         .modal-overlay.active {
@@ -746,447 +1018,389 @@
 
         .modal-content {
             background: white;
-            border-radius: 12px;
-            padding: 30px;
+            border-radius: var(--radius);
+            padding: 20px;
             max-width: 500px;
-            width: 90%;
+            width: 100%;
             position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .modal-close {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 16px;
+            right: 16px;
             background: none;
             border: none;
             font-size: 24px;
             cursor: pointer;
-            color: var(--gray);
-        }
-
-        .whatsapp-btn {
-            background: #25D366;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
+            color: #999;
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            font-weight: 500;
+            justify-content: center;
         }
 
-        .whatsapp-btn:hover {
-            background: #1da851;
+        .modal-close:hover {
+            color: var(--dark);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Utility Classes */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        @media (min-width: 768px) {
+            .container { padding: 0 20px; }
+        }
+
+        /* Loading State */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Focus Styles for Keyboard Navigation */
+        button:focus-visible,
+        a:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
+    <!-- NAVBAR -->
     <nav class="navbar">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex items-center justify-between py-3">
-                <!-- Logo -->
-                <div class="flex items-center gap-2 cursor-pointer">
-                    <div class="bg-white p-2 rounded">
-                        <span class="text-2xl font-bold text-[#2874f0]">S</span>
-                    </div>
-                    <div class="text-white">
-                        <span class="font-bold text-xl tracking-tight">Servify</span>
-                        <p class="text-xs text-blue-200">Explore Services</p>
-                    </div>
+        <div class="navbar-container">
+            <!-- Brand -->
+            <a href="/" class="navbar-brand">
+                <div class="navbar-brand-logo">S</div>
+                <div class="navbar-tagline">
+                    Servify
                 </div>
+            </a>
 
-                <!-- Search Bar -->
-                <div class="search-bar flex items-center flex-1 max-w-2xl mx-8">
-                    <input type="text" placeholder="Search for services you need...">
-                    <button><i class="fas fa-search text-[#2874f0]"></i></button>
-                </div>
+            <!-- Search - Hidden on small screens -->
+            <div class="search-bar" style="display: none;">
+                <input type="text" placeholder="Search services..." aria-label="Search">
+                <button type="submit" title="Search"><i class="fas fa-search"></i></button>
+            </div>
 
-                <!-- Nav Links -->
-                <div class="flex items-center gap-8 text-white">
-                    <div class="relative group cursor-pointer">
-                        <span class="flex items-center gap-2">
-                            <i class="fas fa-user-circle"></i>
-                            Sign In
-                        </span>
-                        <div class="absolute top-full left-0 bg white hidden group-hover:block w-48 bg-white rounded-lg shadow-xl p-4 mt-2">
-                            <div class="flex items-center gap-3 mb-4 pb-4 border-b">
-                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold">JD</div>
-                                <div>
-                                    <p class="font-medium text-gray-800">John Doe</p>
-                                    <p class="text-xs text-gray-500">john@email.com</p>
-                                </div>
-                            </div>
-                            <a href="#" class="block py-2 text-gray-700 hover:text-blue-500"><i class="fas fa-user mr-2"></i> My Profile</a>
-                            <a href="#" class="block py-2 text-gray-700 hover:text-blue-500"><i class="fas fa-gem mr-2"></i> SuperCoin</a>
-                            <a href="#" class="block py-2 text-gray-700 hover:text-blue-500"><i class="fas fa-briefcase mr-2"></i> Orders</a>
-                            <a href="#" class="block py-2 text-gray-700 hover:text-blue-500"><i class="fas fa-heart mr-2"></i> Wishlist</a>
-                        </div>
-                    </div>
-                    <div class="cursor-pointer relative">
-                        <span class="flex items-center gap-2">
-                            <i class="fas fa-shopping-cart"></i>
-                            Cart
-                        </span>
-                        <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">3</span>
-                    </div>
-                    <div class="cursor-pointer">
-                        <i class="fas fa-bell"></i>
-                    </div>
+            <!-- Desktop Nav -->
+            <div class="navbar-links">
+                <div class="navbar-links-item">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Sign In</span>
                 </div>
+                <div class="navbar-links-item icon-only">
+                    <i class="fas fa-shopping-cart"></i>
+                    <div class="cart-badge">3</div>
+                </div>
+                <div class="navbar-links-item icon-only">
+                    <i class="fas fa-bell"></i>
+                </div>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="hamburger" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-menu-content">
+                <a href="#" class="mobile-menu-item">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Sign In</span>
+                </a>
+                <a href="#" class="mobile-menu-item">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>My Cart (3)</span>
+                </a>
+                <a href="#" class="mobile-menu-item">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
+                </a>
+                <a href="#" class="mobile-menu-item">
+                    <i class="fas fa-heart"></i>
+                    <span>Wishlist</span>
+                </a>
+                <a href="#" class="mobile-menu-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
             </div>
         </div>
     </nav>
 
-    <!-- Category Menu -->
-    <div class="category-menu">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex items-center gap-8 py-3 text-sm">
-                <div class="category-item font-medium text-gray-700 hover:text-blue-500 transition flex items-center gap-1">
-                    <i class="fas fa-mobile-alt"></i> Electronics Repair
-                    <i class="fas fa-chevron-down text-xs ml-1"></i>
-                    <div class="submenu p-4">
-                        <a href="#">Phone Repair</a>
-                        <a href="#">Laptop Repair</a>
-                        <a href="#">Tablet Repair</a>
-                        <a href="#">Game Console Repair</a>
-                    </div>
-                </div>
-                <div class="category-item font-medium text-gray-700 hover:text-blue-500 transition flex items-center gap-1">
-                    <i class="fas fa-home"></i> Home Services
-                    <i class="fas fa-chevron-down text-xs ml-1"></i>
-                    <div class="submenu p-4">
-                        <a href="#">Cleaning</a>
-                        <a href="#">Plumbing</a>
-                        <a href="#">Electrical</a>
-                        <a href="#">Painting</a>
-                    </div>
-                </div>
-                <div class="category-item font-medium text-gray-700 hover:text-blue-500 transition flex items-center gap-1">
-                    <i class="fas fa-cut"></i> Salon & Spa
-                    <i class="fas fa-chevron-down text-xs ml-1"></i>
-                    <div class="submenu p-4">
-                        <a href="#">Haircut</a>
-                        <a href="#">Facial</a>
-                        <a href="#">Massage</a>
-                        <a href="#">Manicure/Pedicure</a>
-                    </div>
-                </div>
-                <div class="category-item font-medium text-gray-700 hover:text-blue-500 transition flex items-center gap-1">
-                    <i class="fas fa-graduation-cap"></i> Learning
-                    <i class="fas fa-chevron-down text-xs ml-1"></i>
-                    <div class="submenu p-4">
-                        <a href="#">Tutoring</a>
-                        <a href="#">Language Classes</a>
-                        <a href="#">Music Lessons</a>
-                        <a href="#">Dance Classes</a>
-                    </div>
-                </div>
-                <div class="category-item font-medium text-gray-700 hover:text-blue-500 transition flex items-center gap-1">
-                    <i class="fas fa-stethoscope"></i> Health & Wellness
-                    <i class="fas fa-chevron-down text-xs ml-1"></i>
-                    <div class="submenu p-4">
-                        <a href="#">Yoga Trainer</a>
-                        <a href="#">Personal Trainer</a>
-                        <a href="#">Nutritionist</a>
-                        <a href="#">Physiotherapy</a>
-                    </div>
-                </div>
-                <div class="category-item font-medium text-gray-700 hover:text-blue-500 transition flex items-center gap-1">
-                    <i class="fas fa-paint-brush"></i> Design & Creative
-                    <i class="fas fa-chevron-down text-xs ml-1"></i>
-                    <div class="submenu p-4">
-                        <a href="#">Logo Design</a>
-                        <a href="#">Web Design</a>
-                        <a href="#">Interior Design</a>
-                        <a href="#">Photography</a>
-                    </div>
-                </div>
-                <div class="category-item font-medium text-gray-700 hover:text-blue-500 transition flex items-center gap-1">
-                    <i class="fas fa-calendar-check"></i> Events
-                    <i class="fas fa-chevron-down text-xs ml-1"></i>
-                    <div class="submenu p-4">
-                        <a href="#">Photographer</a>
-                        <a href="#">Catering</a>
-                        <a href="#">DJ Services</a>
-                        <a href="#">Event Planner</a>
-                    </div>
-                </div>
-                <div class="category-item font-medium text-gray-700 hover:text-blue-500 transition flex items-center gap-1">
-                    <i class="fas fa-briefcase"></i> Business
-                    <i class="fas fa-chevron-down text-xs ml-1"></i>
-                    <div class="submenu p-4">
-                        <a href="#">Accounting</a>
-                        <a href="#">Legal Services</a>
-                        <a href="#">Consulting</a>
-                        <a href="#">IT Services</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Banner Slider -->
-    <div class="banner-slider">
+    <!-- BANNER SLIDER -->
+    <section class="banner-slider" role="region" aria-label="Featured services">
         <div class="slides" id="slides">
             <div class="slide">
-                <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1400&h=400&fit=crop" alt="Banner 1">
+                <img src="./image/websits.jpg" alt="Professional Services">
                 <div class="slide-content">
-                    <h2 class="text-4xl font-bold mb-4">Professional Services at Your Doorstep</h2>
-                    <p class="text-xl mb-6">Get quality home services from verified experts</p>
-                    <button class="bg-[#fb641b] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#e55a17] transition">
-                        Book Now
-                    </button>
+                    <h2>Build Your Website with Experts</h2>
+<p>Get modern, responsive and high-performing websites for your business</p>
+<button class="btn btn-primary">Get Started</button>
                 </div>
             </div>
             <div class="slide">
-                <img src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=1400&h=400&fit=crop" alt="Banner 2">
+                <img src="./image/books.jpg" alt="Online Learning">
                 <div class="slide-content">
-                    <h2 class="text-4xl font-bold mb-4">Learn New Skills with Expert Tutors</h2>
-                    <p class="text-xl mb-6">Online & offline classes for all ages</p>
-                    <button class="bg-[#2874f0] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#1e5dc9] transition">
-                        Explore Classes
-                    </button>
+                   <h2>Books Starting from ₹300</h2>
+<p>Explore a wide collection of books for every reader</p>
+<button class="btn btn-secondary">Shop Now</button>
                 </div>
             </div>
             <div class="slide">
-                <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1400&h=400&fit=crop" alt="Banner 3">
+                <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1400&h=700&fit=crop" alt="Cleaning Services">
                 <div class="slide-content">
-                    <h2 class="text-4xl font-bold mb-4">Home Cleaning Services Starting ₹499</h2>
-                    <p class="text-xl mb-6">Deep cleaning by trained professionals</p>
-                    <button class="bg-[#388e3c] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#2e7d32] transition">
-                        Get Started
-                    </button>
+                    <h2>Home Cleaning Starting ₹499</h2>
+                    <p>Deep cleaning by trained professionals</p>
+                    <button class="btn btn-secondary">Get Started</button>
                 </div>
             </div>
             <div class="slide">
-                <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1400&h=400&fit=crop" alt="Banner 4">
+                <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1400&h=700&fit=crop" alt="Beauty Services">
                 <div class="slide-content">
-                    <h2 class="text-4xl font-bold mb-4">Beauty & Wellness Services</h2>
-                    <p class="text-xl mb-6">Salon services at your convenience</p>
-                    <button class="bg-[#9c27b0] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#7b1fa2] transition">
-                        Book Appointment
-                    </button>
+                    <h2>Beauty & Wellness Services</h2>
+                    <p>Salon services at your convenience</p>
+                    <button class="btn btn-primary">Book Appointment</button>
                 </div>
             </div>
         </div>
-        <button class="slider-nav prev" onclick="changeSlide(-1)">
-            <i class="fas fa-chevron-left text-gray-600"></i>
+        
+        <button class="slider-nav prev" onclick="changeSlide(-1)" aria-label="Previous slide">
+            <i class="fas fa-chevron-left"></i>
         </button>
-        <button class="slider-nav next" onclick="changeSlide(1)">
-            <i class="fas fa-chevron-right text-gray-600"></i>
+        <button class="slider-nav next" onclick="changeSlide(1)" aria-label="Next slide">
+            <i class="fas fa-chevron-right"></i>
         </button>
-        <div class="slider-dots" id="dots">
-            <span class="dot active" onclick="goToSlide(0)"></span>
-            <span class="dot" onclick="goToSlide(1)"></span>
-            <span class="dot" onclick="goToSlide(2)"></span>
-            <span class="dot" onclick="goToSlide(3)"></span>
-        </div>
-    </div>
+        
+        <div class="slider-dots" role="tablist" aria-label="Slide indicator">
+            <!-- <button class="dot active" onclick="goToSlide(0)" role="tab" aria-selected="true" aria-label="Slide 1"></button>
+            <button class="dot" onclick="goToSlide(1)" role="tab" aria-selected="false" aria-label="Slide 2"></button>
+            <button class="dot" onclick="goToSlide(2)" role="tab" aria-selected="false" aria-label="Slide 3"></button>
+            <button class="dot" onclick="goToSlide(3)" role="tab" aria-selected="false" aria-label="Slide 4"></button>
+        </div> -->
+    </section>
 
-    <!-- Service Categories Grid -->
-    <div class="bg-gray-100 py-6">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="service-categories">
-                <div class="category-card">
-                    <i class="fas fa-laptop"></i>
-                    <h3>Computer Repair</h3>
-                </div>
-                <div class="category-card">
-                    <i class="fas fa-home"></i>
-                    <h3>Home Cleaning</h3>
-                </div>
-                <div class="category-card">
-                    <i class="fas fa-wrench"></i>
-                    <h3>Plumbing</h3>
-                </div>
-                <div class="category-card">
-                    <i class="fas fa-bolt"></i>
-                    <h3>Electrical</h3>
-                </div>
-                <div class="category-card">
-                    <i class="fas fa-cut"></i>
-                    <h3>Salon</h3>
-                </div>
-                <div class="category-card">
-                    <i class="fas fa-paint-roller"></i>
-                    <h3>Painting</h3>
-                </div>
-                <div class="category-card">
-                    <i class="fas fa-dumbbell"></i>
-                    <h3>Fitness</h3>
-                </div>
-                <div class="category-card">
-                    <i class="fas fa-music"></i>
-                    <h3>Music</h3>
-                </div>
-                <div class="category-card">
-                    <i class="fas fa-camera"></i>
-                    <h3>Photography</h3>
-                </div>
-                <div class="category-card">
-                    <i class="fas fa-truck"></i>
-                    <h3>Moving</h3>
+    <!-- SERVICE CATEGORIES (MOBILE ONLY) -->
+    <section class="section" style="display: block; padding: 16px 0; background: #f5f5f5;">
+        <div class="section-inner">
+            <div class="categories-grid">
+                <div class="category-card"><i class="fas fa-laptop"></i><h4>Repair</h4></div>
+                <div class="category-card"><i class="fas fa-home"></i><h4>Cleaning</h4></div>
+                <div class="category-card"><i class="fas fa-wrench"></i><h4>Plumbing</h4></div>
+                <div class="category-card"><i class="fas fa-bolt"></i><h4>Electric</h4></div>
+                <div class="category-card"><i class="fas fa-cut"></i><h4>Salon</h4></div>
+                <div class="category-card"><i class="fas fa-paint-roller"></i><h4>Paint</h4></div>
+                <div class="category-card"><i class="fas fa-dumbbell"></i><h4>Fitness</h4></div>
+                <div class="category-card"><i class="fas fa-music"></i><h4>Music</h4></div>
+                <div class="category-card"><i class="fas fa-camera"></i><h4>Photo</h4></div>
+                <div class="category-card"><i class="fas fa-truck"></i><h4>Moving</h4></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DESKTOP CATEGORY MENU -->
+    <div class="category-menu">
+        <div class="container">
+            <div class="category-menu-scroll">
+                <div class="category-list">
+                    <div class="category-item active"><i class="fas fa-mobile"></i> Electronics</div>
+                    <div class="category-item"><i class="fas fa-home"></i> Home Services</div>
+                    <div class="category-item"><i class="fas fa-cut"></i>Beauty & Spa</div>
+                    <div class="category-item"><i class="fas fa-graduation-cap"></i> Learning</div>
+                    <div class="category-item"><i class="fas fa-heartbeat"></i> Health</div>
+                    <div class="category-item"><i class="fas fa-paint-brush"></i> Creative</div>
+                    <div class="category-item"><i class="fas fa-calendar"></i> Events</div>
+                    <div class="category-item"><i class="fas fa-briefcase"></i> Business</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Deals of the Day Section -->
-    <section class="bg-gray-100 py-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="section-header rounded-t-lg">
-                <div>
-                    <h2 class="section-title">Deals of the Day</h2>
-                    <p class="text-sm text-gray-500">Limited time offers</p>
+    <!-- DEALS SECTION -->
+    <section class="section" style="background: #f5f5f5;">
+        <div class="section-inner">
+            <div class="section-header">
+                <div class="section-title-group">
+                    <h2>Deals of the Day</h2>
+                    <p>Limited time offers ending soon</p>
                 </div>
-                <div class="flex items-center gap-4">
-                    <div class="flex items-center gap-2 text-sm text-gray-600">
-                        <i class="fas fa-clock"></i>
-                        <span id="countdown">23:45:12</span>
-                    </div>
-                    <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+                <div class="section-action">
+                    <i class="fas fa-clock"></i>
+                    <span id="countdown">23:45:12</span>
                 </div>
             </div>
-            <div class="services-scroll bg-white rounded-b-lg">
-                <div class="service-card" onclick="openModal(' Plumbing Service')">
-                    <div class="service-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="services-scroll">
+                <!-- SERVICE CARDS START -->
+                <div class="service-card" onclick="openModal('Plumbing Service')">
+                    <div class="service-image" style="background: linear-gradient(135deg, #667eea, #764ba2);">
                         <i class="fas fa-wrench"></i>
                         <span class="service-badge">60% OFF</span>
-                        <span class="service-discount">₹299</span>
+                        <span class="service-price-tag">₹299</span>
                     </div>
                     <div class="service-info">
-                        <h3 class="service-title">Home Plumbing Service</h3>
-                        <p class="service-provider">by QuickFix Pros</p>
+                        <h3 class="service-title">Home Plumbing</h3>
+                        <p class="service-provider">QuickFix Pros</p>
                         <div class="service-rating">
-                            <span class="rating-badge">4.5 <i class="fas fa-star text-xs"></i></span>
-                            <span class="rating-count">(2,456)</span>
+                            <span class="rating-badge">4.5 <i class="fas fa-star"></i></span>
+                            <span>(2,456)</span>
                         </div>
                         <div class="service-price">
-                            <span class="current-price">₹299</span>
-                            <span class="original-price">₹749</span>
+                            <span class="price-current">₹299</span>
+                            <span class="price-original">₹749</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="service-card" onclick="openModal(' Hair Styling')">
-                    <div class="service-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                <div class="service-card" onclick="openModal('Salon Package')">
+                    <div class="service-image" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
                         <i class="fas fa-cut"></i>
                         <span class="service-badge">50% OFF</span>
-                        <span class="service-discount">₹399</span>
+                        <span class="service-price-tag">₹399</span>
                     </div>
                     <div class="service-info">
-                        <h3 class="service-title">Unisex Salon Package</h3>
-                        <p class="service-provider">by StyleStudio</p>
+                        <h3 class="service-title">Salon Package</h3>
+                        <p class="service-provider">StyleStudio</p>
                         <div class="service-rating">
-                            <span class="rating-badge">4.7 <i class="fas fa-star text-xs"></i></span>
-                            <span class="rating-count">(1,892)</span>
+                            <span class="rating-badge">4.7 <i class="fas fa-star"></i></span>
+                            <span>(1,892)</span>
                         </div>
                         <div class="service-price">
-                            <span class="current-price">₹399</span>
-                            <span class="original-price">₹799</span>
+                            <span class="price-current">₹399</span>
+                            <span class="price-original">₹799</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="service-card" onclick="openModal(' AC Repair')">
-                    <div class="service-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                <div class="service-card" onclick="openModal('AC Repair')">
+                    <div class="service-image" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
                         <i class="fas fa-snowflake"></i>
                         <span class="service-badge">40% OFF</span>
-                        <span class="service-discount">₹449</span>
+                        <span class="service-price-tag">₹449</span>
                     </div>
                     <div class="service-info">
                         <h3 class="service-title">AC Service & Repair</h3>
-                        <p class="service-provider">by CoolTech Experts</p>
+                        <p class="service-provider">CoolTech Experts</p>
                         <div class="service-rating">
-                            <span class="rating-badge">4.3 <i class="fas fa-star text-xs"></i></span>
-                            <span class="rating-count">(3,214)</span>
+                            <span class="rating-badge">4.3 <i class="fas fa-star"></i></span>
+                            <span>(3,214)</span>
                         </div>
                         <div class="service-price">
-                            <span class="current-price">₹449</span>
-                            <span class="original-price">₹749</span>
+                            <span class="price-current">₹449</span>
+                            <span class="price-original">₹749</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="service-card" onclick="openModal(' Deep Cleaning')">
-                    <div class="service-image" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                <div class="service-card" onclick="openModal('Deep Cleaning')">
+                    <div class="service-image" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
                         <i class="fas fa-spray-can"></i>
                         <span class="service-badge">55% OFF</span>
-                        <span class="service-discount">₹999</span>
+                        <span class="service-price-tag">₹999</span>
                     </div>
                     <div class="service-info">
-                        <h3 class="service-title">Deep Home Cleaning</h3>
-                        <p class="service-provider">by CleanHome Services</p>
+                        <h3 class="service-title">Deep Cleaning</h3>
+                        <p class="service-provider">CleanHome Services</p>
                         <div class="service-rating">
-                            <span class="rating-badge">4.6 <i class="fas fa-star text-xs"></i></span>
-                            <span class="rating-count">(4,567)</span>
+                            <span class="rating-badge">4.6 <i class="fas fa-star"></i></span>
+                            <span>(4,567)</span>
                         </div>
                         <div class="service-price">
-                            <span class="current-price">₹999</span>
-                            <span class="original-price">₹2,199</span>
+                            <span class="price-current">₹999</span>
+                            <span class="price-original">₹2,199</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="service-card" onclick="openModal(' Yoga Session')">
-                    <div class="service-image" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                <div class="service-card" onclick="openModal('Yoga Session')">
+                    <div class="service-image" style="background: linear-gradient(135deg, #fa709a, #fee140);">
                         <i class="fas fa-spa"></i>
                         <span class="service-badge">30% OFF</span>
-                        <span class="service-discount">₹349</span>
+                        <span class="service-price-tag">₹349</span>
                     </div>
                     <div class="service-info">
-                        <h3 class="service-title">Personal Yoga Session</h3>
-                        <p class="service-provider">by ZenFit Academy</p>
+                        <h3 class="service-title">Yoga Session</h3>
+                        <p class="service-provider">ZenFit Academy</p>
                         <div class="service-rating">
-                            <span class="rating-badge">4.8 <i class="fas fa-star text-xs"></i></span>
-                            <span class="rating-count">(987)</span>
+                            <span class="rating-badge">4.8 <i class="fas fa-star"></i></span>
+                            <span>(987)</span>
                         </div>
                         <div class="service-price">
-                            <span class="current-price">₹349</span>
-                            <span class="original-price">₹499</span>
+                            <span class="price-current">₹349</span>
+                            <span class="price-original">₹499</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="service-card" onclick="openModal(' Photography')">
-                    <div class="service-image" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                <div class="service-card" onclick="openModal('Photography')">
+                    <div class="service-image" style="background: linear-gradient(135deg, #a8edea, #fed6e3);">
                         <i class="fas fa-camera-retro"></i>
                         <span class="service-badge">45% OFF</span>
-                        <span class="service-discount">₹2,499</span>
+                        <span class="service-price-tag">₹2,499</span>
                     </div>
                     <div class="service-info">
-                        <h3 class="service-title">Wedding Photography</h3>
-                        <p class="service-provider">by ShutterCreek</p>
+                        <h3 class="service-title">Photography</h3>
+                        <p class="service-provider">ShutterCreek</p>
                         <div class="service-rating">
-                            <span class="rating-badge">4.9 <i class="fas fa-star text-xs"></i></span>
-                            <span class="rating-count">(567)</span>
+                            <span class="rating-badge">4.9 <i class="fas fa-star"></i></span>
+                            <span>(567)</span>
                         </div>
                         <div class="service-price">
-                            <span class="current-price">₹2,499</span>
-                            <span class="original-price">₹4,499</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="service-card" onclick="openModal(' Tutoring')">
-                    <div class="service-image" style="background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%);">
-                        <i class="fas fa-chalkboard-teacher"></i>
-                        <span class="service-badge">25% OFF</span>
-                        <span class="service-discount">₹199</span>
-                    </div>
-                    <div class="service-info">
-                        <h3 class="service-title">Math Tutoring (Class 1-10)</h3>
-                        <p class="service-provider">by EduFirst</p>
-                        <div class="service-rating">
-                            <span class="rating-badge">4.4 <i class="fas fa-star text-xs"></i></span>
-                            <span class="rating-count">(1,234)</span>
-                        </div>
-                        <div class="service-price">
-                            <span class="current-price">₹199</span>
-                            <span class="original-price">₹299</span>
+                            <span class="price-current">₹2,499</span>
+                            <span class="price-original">₹4,499</span>
                         </div>
                     </div>
                 </div>
@@ -1194,144 +1408,88 @@
         </div>
     </section>
 
-    <!-- Top Services Section -->
-    <section class="bg-gray-100 py-6 mt-4">
-        <div class="max-w-7xl mx-auto">
-            <div class="section-header rounded-t-lg">
-                <div>
-                    <h2 class="section-title">Top Rated Services</h2>
-                    <p class="text-sm text-gray-500">Most popular among customers</p>
+    <!-- TOP RATED SERVICES -->
+    <section class="section" style="background: #f5f5f5;">
+        <div class="section-inner">
+            <div class="section-header">
+                <div class="section-title-group">
+                    <h2>Top Rated Services</h2>
+                    <p>Most popular among customers</p>
                 </div>
-                <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+                <div class="section-action" style="color: var(--primary);">View All <i class="fas fa-arrow-right"></i></div>
             </div>
-            <div class="services-scroll bg-white rounded-b-lg">
-                <div class="service-card" onclick="openModal(' Electrician')">
-                    <div class="service-image" style="background: linear-gradient(135deg, #f5af19 0%, #f12711 100%);">
+            <div class="services-scroll">
+                <div class="service-card" onclick="openModal('Electrician')">
+                    <div class="service-image" style="background: linear-gradient(135deg, #d299c2, #fef9d7);">
                         <i class="fas fa-bolt"></i>
                         <span class="service-badge">TRENDING</span>
                     </div>
                     <div class="service-info">
                         <h3 class="service-title">Electrician Visit</h3>
-                        <p class="service-provider">by PowerPro</p>
+                        <p class="service-provider">PowerPro</p>
                         <div class="service-rating">
-                            <span class="rating-badge">4.6 <i class="fas fa-star text-xs"></i></span>
-                            <span class="rating-count">(5,678)</span>
+                            <span class="rating-badge">4.6 <i class="fas fa-star"></i></span>
+                            <span>(5,678)</span>
                         </div>
                         <div class="service-price">
-                            <span class="current-price">₹249</span>
-                            <span class="free-service">Free Installation</span>
+                            <span class="price-current">₹249</span>
+                            <span style="color: var(--tertiary); font-size: 0.8rem;">Free Install</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="service-card" onclick="openModal(' Massage')">
-                    <div class="service-image" style="background: linear-gradient(135deg, #c471f5 0%, #fa71cd 100%);">
+                <div class="service-card" onclick="openModal('Massage')">
+                    <div class="service-image" style="background: linear-gradient(135deg, #f5af19, #f12711);">
                         <i class="fas fa-hands"></i>
                         <span class="service-badge">PREMIUM</span>
                     </div>
                     <div class="service-info">
                         <h3 class="service-title">Aromatherapy Massage</h3>
-                        <p class="service-provider">by Serenity Spa</p>
+                        <p class="service-provider">Serenity Spa</p>
                         <div class="service-rating">
-                            <span class="rating-badge">4.9 <i class="fas fa-star text-xs"></i></span>
-                            <span class="rating-count">(2,345)</span>
+                            <span class="rating-badge">4.9 <i class="fas fa-star"></i></span>
+                            <span>(2,345)</span>
                         </div>
                         <div class="service-price">
-                            <span class="current-price">₹899</span>
-                            <span class="original-price">₹1,499</span>
+                            <span class="price-current">₹899</span>
+                            <span class="price-original">₹1,499</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="service-card" onclick="openModal(' Web Development')">
-                    <div class="service-image" style="background: linear-gradient(135deg, #0ba360 0%, #3cba92 100%);">
+                <div class="service-card" onclick="openModal('Web Development')">
+                    <div class="service-image" style="background: linear-gradient(135deg, #c471f5, #fa71cd);">
                         <i class="fas fa-code"></i>
                         <span class="service-badge">BESTSELLER</span>
                     </div>
                     <div class="service-info">
                         <h3 class="service-title">Website Development</h3>
-                        <p class="service-provider">by WebCrafters</p>
+                        <p class="service-provider">WebCrafters</p>
                         <div class="service-rating">
-                            <span class="rating-badge">4.7 <i class="fas fa-star text-xs"></i></span>
-                            <span class="rating-count">(1,876)</span>
+                            <span class="rating-badge">4.7 <i class="fas fa-star"></i></span>
+                            <span>(1,876)</span>
                         </div>
                         <div class="service-price">
-                            <span class="current-price">₹5,999</span>
-                            <span class="original-price">₹12,999</span>
+                            <span class="price-current">₹5,999</span>
+                            <span class="price-original">₹12,999</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="service-card" onclick="openModal(' Carpet Cleaning')">
-                    <div class="service-image" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">
+                <div class="service-card" onclick="openModal('Carpet Cleaning')">
+                    <div class="service-image" style="background: linear-gradient(135deg, #0ba360, #3cba92);">
                         <i class="fas fa-couch"></i>
                     </div>
                     <div class="service-info">
-                        <h3 class="service-title">Carpet Cleaning Service</h3>
-                        <p class="service-provider">by FreshCarpet Co.</p>
+                        <h3 class="service-title">Carpet Cleaning</h3>
+                        <p class="service-provider">FreshCarpet Co.</p>
                         <div class="service-rating">
-                            <span class="rating-badge">4.4 <i class="fas fa-star text-xs"></i></span>
-                            <span class="rating-count">(876)</span>
+                            <span class="rating-badge">4.4 <i class="fas fa-star"></i></span>
+                            <span>(876)</span>
                         </div>
                         <div class="service-price">
-                            <span class="current-price">₹599</span>
-                            <span class="original-price">₹999</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="service-card" onclick="openModal(' Chef Service')">
-                    <div class="service-image" style="background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);">
-                        <i class="fas fa-utensils"></i>
-                        <span class="service-badge">NEW</span>
-                    </div>
-                    <div class="service-info">
-                        <h3 class="service-title">Personal Chef (4 hours)</h3>
-                        <p class="service-provider">by ChefAtHome</p>
-                        <div class="service-rating">
-                            <span class="rating-badge">4.8 <i class="fas fa-star text-xs"></i></span>
-                            <span class="rating-count">(543)</span>
-                        </div>
-                        <div class="service-price">
-                            <span class="current-price">₹1,999</span>
-                            <span class="original-price">₹3,500</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="service-card" onclick="openModal(' Dog Grooming')">
-                    <div class="service-image" style="background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);">
-                        <i class="fas fa-dog"></i>
-                    </div>
-                    <div class="service-info">
-                        <h3 class="service-title">Pet Grooming Service</h3>
-                        <p class="service-provider">by Paws & Claws</p>
-                        <div class="service-rating">
-                            <span class="rating-badge">4.6 <i class="fas fa-star text-xs"></i></span>
-                            <span class="rating-count">(1,234)</span>
-                        </div>
-                        <div class="service-price">
-                            <span class="current-price">₹699</span>
-                            <span class="original-price">₹1,199</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="service-card" onclick="openModal(' CCTV Installation')">
-                    <div class="service-image" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);">
-                        <i class="fas fa-video"></i>
-                        <span class="service-badge">SECURE</span>
-                    </div>
-                    <div class="service-info">
-                        <h3 class="service-title">CCTV Installation</h3>
-                        <p class="service-provider">by SecureHome</p>
-                        <div class="service-rating">
-                            <span class="rating-badge">4.5 <i class="fas fa-star text-xs"></i></span>
-                            <span class="rating-count">(2,156)</span>
-                        </div>
-                        <div class="service-price">
-                            <span class="current-price">₹1,299</span>
-                            <span class="original-price">₹2,499</span>
+                            <span class="price-current">₹599</span>
+                            <span class="price-original">₹999</span>
                         </div>
                     </div>
                 </div>
@@ -1339,76 +1497,74 @@
         </div>
     </section>
 
-    <!-- Articles/Blog Section -->
-    <section class="bg-gray-100 py-10 mt-4">
-        <div class="max-w-7xl mx-auto">
-            <div class="section-header rounded-t-lg">
-                <div>
-                    <h2 class="section-title">Latest Articles & Tips</h2>
-                    <p class="text-sm text-gray-500">Insights from our experts</p>
+    <!-- ARTICLES SECTION -->
+    <section class="section" style="background: white;">
+        <div class="section-inner">
+            <div class="section-header">
+                <div class="section-title-group">
+                    <h2>Latest Articles & Tips</h2>
+                    <p>Insights from our experts</p>
                 </div>
-                <a href="#" class="view-all">View All Articles <i class="fas fa-arrow-right"></i></a>
+                <div class="section-action">View All <i class="fas fa-arrow-right"></i></div>
             </div>
-            <div class="articles-grid bg-white rounded-b-lg">
+            
+            <div class="articles-grid">
                 <div class="article-card">
                     <div class="article-image">
-                        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=300&fit=crop" alt="Article 1">
-                        <span class="article-category">Home Services</span>
+                        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop" alt="Home Maintenance">
+                        <span class="article-tag">Home Services</span>
                     </div>
                     <div class="article-content">
-                        <h3 class="article-title">10 Essential Home Maintenance Tips Every Homeowner Should Know</h3>
-                        <p class="article-excerpt">Regular maintenance can save you thousands in repairs. Here are the key tasks to keep your home in top condition throughout the year.</p>
+                        <h3 class="article-title">10 Essential Home Maintenance Tips</h3>
+                        <p class="article-excerpt">Regular maintenance can save thousands in repairs. Learn the key tasks to keep your home in top condition.</p>
                         <div class="article-meta">
                             <div class="article-author">
-                                <div class="author-avatar">RK</div>
+                                <div class="article-author-avatar">RK</div>
                                 <div>
-                                    <p class="author-name">Rajesh Kumar</p>
-                                    <p class="read-time">5 min read</p>
+                                    <p style="margin: 0; font-weight: 500;">Rajesh Kumar</p>
+                                    <p style="margin: 0; font-size: 0.75rem; color: #999;">5 min read</p>
                                 </div>
                             </div>
-                            <span class="text-xs text-gray-400">Dec 15, 2024</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="article-card">
                     <div class="article-image">
-                        <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&h=300&fit=crop" alt="Article 2">
-                        <span class="article-category">Wellness</span>
+                        <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&h=400&fit=crop" alt="Spa Wellness">
+                        <span class="article-tag">Wellness</span>
                     </div>
                     <div class="article-content">
-                        <h3 class="article-title">How Regular Spa Visits Can Improve Your Mental Health</h3>
-                        <p class="article-excerpt">Discover the science-backed benefits of regular spa treatments and how they can help reduce stress and anxiety in your daily life.</p>
+                        <h3 class="article-title">How Spa Visits Improve Mental Health</h3>
+                        <p class="article-excerpt">Discover science-backed benefits of regular spa treatments and stress relief techniques for daily life.</p>
                         <div class="article-meta">
                             <div class="article-author">
-                                <div class="author-avatar">PS</div>
+                                <div class="article-author-avatar">PS</div>
                                 <div>
-                                    <p class="author-name">Priya Sharma</p>
-                                    <p class="read-time">4 min read</p>
+                                    <p style="margin: 0; font-weight: 500;">Priya Sharma</p>
+                                    <p style="margin: 0; font-size: 0.75rem; color: #999;">4 min read</p>
                                 </div>
                             </div>
-                            <span class="text-xs text-gray-400">Dec 12, 2024</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="article-card">
                     <div class="article-image">
-                        <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=300&fit=crop" alt="Article 3">
-                        <span class="article-category">Education</span>
+                        <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop" alt="Online Learning">
+                        <span class="article-tag">Education</span>
                     </div>
                     <div class="article-content">
-                        <h3 class="article-title">The Future of Online Learning: Trends to Watch in 2025</h3>
-                        <p class="article-excerpt">From AI-powered tutors to virtual reality classrooms, explore the emerging technologies transforming how we learn and teach.</p>
+                        <h3 class="article-title">The Future of Online Learning 2025</h3>
+                        <p class="article-excerpt">From AI-powered tutors to VR classrooms, explore emerging technologies transforming education.</p>
                         <div class="article-meta">
                             <div class="article-author">
-                                <div class="author-avatar">AM</div>
+                                <div class="article-author-avatar">AM</div>
                                 <div>
-                                    <p class="author-name">Amit Mehta</p>
-                                    <p class="read-time">6 min read</p>
+                                    <p style="margin: 0; font-weight: 500;">Amit Mehta</p>
+                                    <p style="margin: 0; font-size: 0.75rem; color: #999;">6 min read</p>
                                 </div>
                             </div>
-                            <span class="text-xs text-gray-400">Dec 10, 2024</span>
                         </div>
                     </div>
                 </div>
@@ -1416,70 +1572,63 @@
         </div>
     </section>
 
-    <!-- Trust Badges Section -->
-    <section class="bg-blue-50 py-10 mt-4">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="grid grid-cols-4 gap-8 text-center">
-                <div class="flex flex-col items-center">
-                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md mb-4">
-                        <i class="fas fa-shield-alt text-3xl text-[#2874f0]"></i>
-                    </div>
-                    <h4 class="font-semibold text-gray-800">100% Safe & Secure</h4>
-                    <p class="text-sm text-gray-500 mt-2">All services are verified</p>
-                </div>
-                <div class="flex flex-col items-center">
-                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md mb-4">
-                        <i class="fas fa-headset text-3xl text-[#2874f0]"></i>
-                    </div>
-                    <h4 class="font-semibold text-gray-800">24/7 Support</h4>
-                    <p class="text-sm text-gray-500 mt-2">Always here to help you</p>
-                </div>
-                <div class="flex flex-col items-center">
-                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md mb-4">
-                        <i class="fas fa-thumbs-up text-3xl text-[#2874f0]"></i>
-                    </div>
-                    <h4 class="font-semibold text-gray-800">Quality Assured</h4>
-                    <p class="text-sm text-gray-500 mt-2">Best-in-class professionals</p>
-                </div>
-                <div class="flex flex-col items-center">
-                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md mb-4">
-                        <i class="fas fa-wallet text-3xl text-[#2874f0]"></i>
-                    </div>
-                    <h4 class="font-semibold text-gray-800">Best Prices</h4>
-                    <p class="text-sm text-gray-500 mt-2">Competitive rates guaranteed</p>
-                </div>
+    <!-- TRUST BADGES -->
+    <section class="trust-badges">
+        <div class="badge-item">
+            <div class="badge-icon"><i class="fas fa-shield-alt"></i></div>
+            <div class="badge-text">
+                <h4>100% Safe</h4>
+                <p>Verified professionals</p>
+            </div>
+        </div>
+        <div class="badge-item">
+            <div class="badge-icon"><i class="fas fa-headset"></i></div>
+            <div class="badge-text">
+                <h4>24/7 Support</h4>
+                <p>Always here to help</p>
+            </div>
+        </div>
+        <div class="badge-item">
+            <div class="badge-icon"><i class="fas fa-thumbs-up"></i></div>
+            <div class="badge-text">
+                <h4>Quality Assured</h4>
+                <p>Best professionals</p>
+            </div>
+        </div>
+        <div class="badge-item">
+            <div class="badge-icon"><i class="fas fa-wallet"></i></div>
+            <div class="badge-text">
+                <h4>Best Prices</h4>
+                <p>Competitive rates</p>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- FOOTER -->
     <footer>
         <div class="footer-top">
-            <div class="footer-section footer-about">
-                <div class="flex items-center gap-2 mb-4">
-                    <div class="bg-[#2874f0] p-2 rounded">
-                        <span class="text-2xl font-bold text-white">S</span>
-                    </div>
-                    <span class="font-bold text-xl">Servify</span>
+            <div class="footer-section">
+                <div class="footer-brand">
+                    <div class="footer-brand-logo">S</div>
+                    Servify
                 </div>
-                <p>Servify is your one-stop destination for all service needs. We connect you with verified professionals offering quality services at competitive prices.</p>
-                <div class="social-links mt-4">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#"><i class="fab fa-youtube"></i></a>
+                <p class="footer-about">Your one-stop destination for professional services. We connect you with verified experts offering quality at competitive prices.</p>
+                <div class="social-links">
+                    <a href="#" title="Facebook" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" title="Twitter" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" title="Instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" title="LinkedIn" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
                 </div>
             </div>
 
             <div class="footer-section">
-                <h4>Popular Services</h4>
+                <h4>Services</h4>
                 <ul>
                     <li><a href="#">Home Cleaning</a></li>
-                    <li><a href="#">Plumbing Services</a></li>
-                    <li><a href="#">Electrician</a></li>
+                    <li><a href="#">Plumbing</a></li>
+                    <li><a href="#">Electrical</a></li>
                     <li><a href="#">AC Repair</a></li>
-                    <li><a href="#">Salon at Home</a></li>
+                    <li><a href="#">Salon</a></li>
                     <li><a href="#">Pest Control</a></li>
                 </ul>
             </div>
@@ -1492,7 +1641,7 @@
                     <li><a href="#">Blog</a></li>
                     <li><a href="#">Press</a></li>
                     <li><a href="#">Partnership</a></li>
-                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Terms</a></li>
                 </ul>
             </div>
 
@@ -1502,100 +1651,76 @@
                     <li><a href="#">Help Center</a></li>
                     <li><a href="#">Contact Us</a></li>
                     <li><a href="#">FAQs</a></li>
-                    <li><a href="#">Cancellation Policy</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Cookie Policy</a></li>
+                    <li><a href="#">Cancellations</a></li>
+                    <li><a href="#">Privacy</a></li>
+                    <li><a href="#">Cookies</a></li>
                 </ul>
             </div>
 
             <div class="footer-section">
-                <div class="newsletter">
-                    <h4>Subscribe to Newsletter</h4>
-                    <p class="text-sm text-gray-400 mt-2">Get updates on new services and exclusive offers!</p>
+                <div class="newsletter-section">
+                    <h4>Newsletter</h4>
+                    <p>Get updates on new services & exclusive offers!</p>
                     <div class="newsletter-form">
-                        <input type="email" placeholder="Enter your email">
+                        <input type="email" placeholder="Your email" aria-label="Email">
                         <button>Subscribe</button>
-                    </div>
-                    <div class="mt-4">
-                        <p class="text-sm text-gray-400 mb-2">Download our app</p>
-                        <div class="flex gap-2">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" class="h-10">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" class="h-10">
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="footer-bottom">
-            <div class="copyright">
-                <p>© 2024 Servify. All rights reserved. Made with <i class="fas fa-heart text-red-500"></i> in India</p>
-            </div>
-            <div class="payment-methods">
-                <span>Payment Methods:</span>
-                <div class="payment-icons">
-                    <i class="fab fa-cc-visa"></i>
-                    <i class="fab fa-cc-mastercard"></i>
-                    <i class="fab fa-cc-amex"></i>
-                    <i class="fab fa-google-pay"></i>
-                    <i class="fab fa-apple-pay"></i>
-                </div>
-            </div>
+            <p>© 2024 Servify. All rights reserved. <i class="fas fa-heart" style="color: #ff4444;"></i></p>
+            <p>Payment Methods: <i class="fab fa-cc-visa"></i> <i class="fab fa-cc-mastercard"></i> <i class="fab fa-cc-amex"></i> <i class="fab fa-google-pay"></i></p>
         </div>
     </footer>
 
-    <!-- Quick View Modal -->
-    <div class="modal-overlay" id="modal">
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modal" role="dialog" aria-hidden="true">
         <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()">&times;</button>
-            <div class="flex items-center gap-4 mb-6">
-                <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-wrench text-2xl text-white" id="modalIcon"></i>
+            <button class="modal-close" onclick="closeModal()" aria-label="Close dialog">&times;</button>
+            <h3 id="modalTitle" style="margin-bottom: 16px;">Service Details</h3>
+            <p style="color: #999; margin-bottom: 16px;">by Servify Verified Pro</p>
+            <div style="padding: 16px; background: #f5f5f5; border-radius: 8px; margin-bottom: 16px;">
+                <div class="service-rating" style="margin-bottom: 8px;">
+                    <span class="rating-badge">4.5 <i class="fas fa-star"></i></span>
+                    <span style="font-size: 0.9rem;">(2,456 reviews)</span>
                 </div>
-                <div>
-                    <h3 class="text-xl font-bold text-gray-800" id="modalTitle">Service Details</h3>
-                    <p class="text-sm text-gray-500">by Servify Verified Pro</p>
-                </div>
+                <p>Professional service with 100% satisfaction guarantee. Our expert technicians are trained and verified.</p>
             </div>
-            <div class="mb-6">
-                <div class="flex items-center gap-2 mb-3">
-                    <span class="rating-badge">4.5 <i class="fas fa-star text-xs"></i></span>
-                    <span class="text-sm text-gray-500">(2,456 reviews)</span>
-                </div>
-                <p class="text-gray-600 text-sm leading-relaxed">Professional service with 100% satisfaction guarantee. Our expert technicians are trained and background-verified.</p>
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                <span style="font-size: 1.5rem; font-weight: 700; color: var(--dark);">₹299</span>
+                <span style="text-decoration: line-through; color: #999;">₹749</span>
+                <span style="background: rgba(56, 142, 60, 0.1); color: var(--tertiary); padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; font-weight: 600;">60% OFF</span>
             </div>
-            <div class="flex items-center gap-3 mb-6">
-                <span class="current-price text-2xl">₹299</span>
-                <span class="original-price">₹749</span>
-                <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded">60% OFF</span>
-            </div>
-            <div class="space-y-3 mb-6">
-                <div class="flex items-center gap-2 text-sm text-gray-600">
-                    <i class="fas fa-check-circle text-green-500"></i>
-                    Professional Equipment
-                </div>
-                <div class="flex items-center gap-2 text-sm text-gray-600">
-                    <i class="fas fa-check-circle text-green-500"></i>
-                    7-Day Service Warranty
-                </div>
-                <div class="flex items-center gap-2 text-sm text-gray-600">
-                    <i class="fas fa-check-circle text-green-500"></i>
-                    Trained & Verified Pro
-                </div>
-            </div>
-            <div class="flex gap-3">
-                <button class="flex-1 bg-[#fb641b] text-white py-3 rounded-lg font-semibold hover:bg-[#e55a17] transition">
-                    Book Now
-                </button>
-                <button class="whatsapp-btn">
-                    <i class="fab fa-whatsapp text-xl"></i>
-                    Chat
-                </button>
+            <div style="display: flex; gap: 12px;">
+                <button class="btn btn-secondary" style="flex: 1;">Book Now</button>
+                <button class="btn" style="background: #25D366; color: white; flex: 1;"><i class="fab fa-whatsapp"></i> Chat</button>
             </div>
         </div>
     </div>
 
     <script>
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        menuToggle.addEventListener('click', () => {
+            const isActive = mobileMenu.classList.contains('active');
+            mobileMenu.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+            menuToggle.setAttribute('aria-expanded', !isActive);
+        });
+
+        // Close menu when clicking items
+        document.querySelectorAll('.mobile-menu-item').forEach(item => {
+            item.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                menuToggle.classList.remove('active');
+                menuToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+
         // Banner Slider
         let currentSlide = 0;
         const slides = document.getElementById('slides');
@@ -1618,19 +1743,18 @@
             slides.style.transform = `translateX(-${currentSlide * 100}%)`;
             dots.forEach((dot, index) => {
                 dot.classList.toggle('active', index === currentSlide);
+                dot.setAttribute('aria-selected', index === currentSlide);
             });
         }
 
         // Auto slide
-        setInterval(() => {
-            changeSlide(1);
-        }, 5000);
+        setInterval(() => changeSlide(1), 6000);
 
         // Countdown Timer
         function updateCountdown() {
             const now = new Date();
             const endOfDay = new Date();
-            endOfDay.setHours(23, 59, 59, 999);
+            endOfDay.setHours(23, 59, 59);
             const diff = endOfDay - now;
 
             const hours = Math.floor(diff / (1000 * 60 * 60));
@@ -1638,27 +1762,33 @@
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
             document.getElementById('countdown').textContent = 
-                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }
 
         setInterval(updateCountdown, 1000);
         updateCountdown();
 
-        // Modal Functions
+        // Modal
         function openModal(serviceName) {
-            document.getElementById('modalTitle').textContent = serviceName + ' Details';
+            document.getElementById('modalTitle').textContent = serviceName;
             document.getElementById('modal').classList.add('active');
+            document.getElementById('modal').setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
             document.getElementById('modal').classList.remove('active');
+            document.getElementById('modal').setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = 'auto';
         }
 
-        // Close modal on overlay click
         document.getElementById('modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
+            if (e.target === this) closeModal();
+        });
+
+        // Keyboard support
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
         });
 
         // Scroll animations
@@ -1675,18 +1805,8 @@
             });
         }, observerOptions);
 
-        document.querySelectorAll('.service-card, .article-card, .category-card').forEach(el => {
+        document.querySelectorAll('.service-card, .article-card, .badge-item').forEach(el => {
             observer.observe(el);
-        });
-
-        // Search functionality
-        document.querySelector('.search-bar input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const searchTerm = this.value.trim();
-                if (searchTerm) {
-                    alert(`Searching for: ${searchTerm}`);
-                }
-            }
         });
     </script>
 </body>
