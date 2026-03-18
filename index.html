@@ -1,0 +1,1708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servify - Your Marketplace for Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        :root {
+            --primary: #2874f0;
+            --secondary: #fb641b;
+            --dark: #172b4d;
+            --light: #f2f2f2;
+            --gray: #878787;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary) 0%, #1e5dc9 100%);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .search-bar {
+            background: white;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .search-bar input {
+            outline: none;
+            border: none;
+            padding: 10px 16px;
+            width: 500px;
+            font-size: 14px;
+        }
+
+        .search-bar button {
+            background: #e3e9f2;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .search-bar button:hover {
+            background: #d4dbe6;
+        }
+
+        /* Category Menu */
+        .category-menu {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+
+        .category-item {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .category-item:hover .submenu {
+            display: block;
+        }
+
+        .submenu {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: 0;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-radius: 4px;
+            z-index: 100;
+        }
+
+        .submenu a {
+            display: block;
+            padding: 10px 16px;
+            color: var(--dark);
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .submenu a:hover {
+            background: #f0f4ff;
+            color: var(--primary);
+        }
+
+        /* Banner Slider */
+        .banner-slider {
+            position: relative;
+            overflow: hidden;
+            height: 320px;
+        }
+
+        .slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 100%;
+        }
+
+        .slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slide-content {
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            transform: translateY(-50%);
+            color: white;
+            z-index: 10;
+        }
+
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.8);
+            border: none;
+            width: 50px;
+            height: 80px;
+            cursor: pointer;
+            z-index: 20;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slider-nav:hover {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .slider-nav.prev { left: 10px; border-radius: 0 4px 4px 0; }
+        .slider-nav.next { right: 10px; border-radius: 4px 0 0 4px; }
+
+        .slider-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 20;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            background: white;
+            transform: scale(1.2);
+        }
+
+        /* Service Categories Grid */
+        .service-categories {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 1px;
+            background: #e2e8f0;
+        }
+
+        .category-card {
+            background: white;
+            padding: 20px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .category-card:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transform: translateY(-3px);
+        }
+
+        .category-card i {
+            font-size: 36px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .category-card h3 {
+            font-size: 13px;
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        /* Deals Section */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .view-all {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .view-all:hover {
+            text-decoration: underline;
+        }
+
+        .services-scroll {
+            display: flex;
+            overflow-x: auto;
+            padding: 20px;
+            gap: 16px;
+            -ms-overflow-style: none;
+        }
+
+        .services-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Service Card */
+        .service-card {
+            min-width: 240px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transform: translateY(-5px);
+        }
+
+        .service-image {
+            height: 160px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-image i {
+            font-size: 60px;
+            color: white;
+            opacity: 0.9;
+        }
+
+        .service-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--secondary);
+            color: white;
+            padding: 4px 8px;
+            font-size: 11px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .service-discount {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 4px 8px;
+            font-size: 11px;
+            border-radius: 4px;
+        }
+
+        .service-info {
+            padding: 12px;
+        }
+
+        .service-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--dark);
+            margin-bottom: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .service-provider {
+            font-size: 12px;
+            color: var(--gray);
+            margin-bottom: 8px;
+        }
+
+        .service-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        .rating-badge {
+            background: #388e3c;
+            color: white;
+            padding: 2px 6px;
+            font-size: 11px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .rating-count {
+            font-size: 11px;
+            color: var(--gray);
+        }
+
+        .service-price {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .current-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .original-price {
+            font-size: 12px;
+            color: var(--gray);
+            text-decoration: line-through;
+        }
+
+        .free-service {
+            font-size: 11px;
+            color: #388e3c;
+            font-weight: 500;
+        }
+
+        /* Articles Section */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            padding: 24px;
+        }
+
+        .article-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .article-card:hover {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            transform: translateY(-5px);
+        }
+
+        .article-image {
+            height: 200px;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .article-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .article-category {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: var(--primary);
+            color: white;
+            padding: 6px 12px;
+            font-size: 11px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .article-content {
+            padding: 20px;
+        }
+
+        .article-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .article-excerpt {
+            font-size: 14px;
+            color: var(--gray);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 16px;
+            border-top: 1px solid #eee;
+        }
+
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .author-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .author-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .read-time {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        /* Footer */
+        footer {
+            background: #172b4d;
+            color: white;
+            margin-top: 60px;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
+            gap: 40px;
+            padding: 50px 60px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-section h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            color: #9497a1;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.3s;
+        }
+
+        .footer-section ul li a:hover {
+            color: white;
+        }
+
+        .footer-about p {
+            color: #9497a1;
+            font-size: 13px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-links a {
+            width: 36px;
+            height: 36px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .newsletter {
+            background: rgba(255,255,255,0.05);
+            padding: 24px;
+            border-radius: 8px;
+        }
+
+        .newsletter h4 {
+            margin-bottom: 12px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            outline: none;
+        }
+
+        .newsletter-form input::placeholder {
+            color: #9497a1;
+        }
+
+        .newsletter-form button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .newsletter-form button:hover {
+            background: #e55a17;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+        }
+
+        .copyright {
+            color: #9497a1;
+            font-size: 13px;
+        }
+
+        .payment-methods {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .payment-methods span {
+            color: #9497a1;
+            font-size: 12px;
+        }
+
+        .payment-icons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .payment-icons i {
+            font-size: 24px;
+            color: #9497a1;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 1200px) {
+            .service-categories {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .footer-top {
+                grid-template-columns: repeat(2, 1fr);
+                padding: 40px 30px;
+            }
+            
+            .articles-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .search-bar input {
+                width: 200px;
+            }
+            
+            .banner-slider {
+                height: 200px;
+            }
+            
+            .service-categories {
+                grid-template-columns: repeat(5, 1fr);
+            }
+            
+            .category-card i {
+                font-size: 28px;
+            }
+            
+            .category-card h3 {
+                font-size: 11px;
+            }
+            
+            .footer-top {
+                grid-template-columns: 1fr;
+            }
+            
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px;
+                text-align: center;
+            }
+            
+            .slide-content h2 {
+                font-size: 24px !important;
+            }
+            
+            .slide-content p {
+                font-size: 14px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .search-bar input {
+                width: 150px;
+            }
+            
+            .service-categories {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .service-card {
+                min-width: 200px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        /* Quick View Modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .whatsapp-btn:hover {
+            background: #1da851;
+        }
+
+        /* Service Image Gradients */
+        .gradient-1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .gradient-2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .gradient-3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .gradient-4 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .gradient-5 { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .gradient-6 { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        .gradient-7 { background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%); }
+        .gradient-8 { background: linear-gradient(135deg, #f5af19 0%, #f12711 100%); }
+        .gradient-9 { background: linear-gradient(135deg, #c471f5 0%, #fa71cd 100%); }
+        .gradient-10 { background: linear-gradient(135deg, #0ba360 0%, #3cba92 100%); }
+        .gradient-11 { background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); }
+        .gradient-12 { background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%); }
+        .gradient-13 { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); }
+        .gradient-14 { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-center justify-between py-3">
+                <!-- Logo -->
+                <div class="flex items-center gap-2 cursor-pointer">
+                    <div class="bg-white p-2 rounded">
+                        <span class="text-2xl font-bold text-[#2874f0]">S</span>
+                    </div>
+                    <div class="text-white">
+                        <span class="font-bold text-xl tracking-tight">Servify</span>
+                        <p class="text-xs text-blue-200">Explore Services</p>
+                    </div>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="search-bar flex items-center flex-1 max-w-2xl mx-8">
+                    <input type="text" placeholder="Search for services you need...">
+                    <button type="submit" title="Search"><i class="fas fa-search text-[#2874f0]"></i></button>
+                </div>
+
+                <!-- Nav Links -->
+                <div class="flex items-center gap-8 text-white">
+                    <div class="relative group cursor-pointer">
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-user-circle"></i>
+                            Sign In
+                        </span>
+                        <div class="absolute top-full left-0 bg white hidden group-hover:block w-48 bg-white rounded-lg shadow-xl p-4 mt-2">
+                            <div class="flex items-center gap-3 mb-4 pb-4 border-b">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold">JD</div>
+                                <div>
+                                    <p class="font-medium text-gray-800">John Doe</p>
+                                    <p class="text-xs text-gray-500">john@email.com</p>
+                                </div>
+                            </div>
+                            <a href="#" class="block py-2 text-gray-700 hover:text-blue-500"><i class="fas fa-user mr-2"></i> My Profile</a>
+                            <a href="#" class="block py-2 text-gray-700 hover:text-blue-500"><i class="fas fa-gem mr-2"></i> SuperCoin</a>
+                            <a href="#" class="block py-2 text-gray-700 hover:text-blue-500"><i class="fas fa-briefcase mr-2"></i> Orders</a>
+                            <a href="#" class="block py-2 text-gray-700 hover:text-blue-500"><i class="fas fa-heart mr-2"></i> Wishlist</a>
+                        </div>
+                    </div>
+                    <div class="cursor-pointer relative">
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-shopping-cart"></i>
+                            Cart
+                        </span>
+                        <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">3</span>
+                    </div>
+                    <div class="cursor-pointer">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Category Menu -->
+    <div class="category-menu">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-center gap-8 py-3 text-sm">
+                <div class="category-item font-medium text-gray-700 hover:text-blue-500 transition flex items-center gap-1">
+                    <i class="fas fa-mobile-alt"></i> Electronics Repair
+                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                    <div class="submenu p-4">
+                        <a href="#">Phone Repair</a>
+                        <a href="#">Laptop Repair</a>
+                        <a href="#">Tablet Repair</a>
+                        <a href="#">Game Console Repair</a>
+                    </div>
+                </div>
+                <div class="category-item font-medium text-gray-700 hover:text-blue-500 transition flex items-center gap-1">
+                    <i class="fas fa-home"></i> Home Services
+                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                    <div class="submenu p-4">
+                        <a href="#">Cleaning</a>
+                        <a href="#">Plumbing</a>
+                        <a href="#">Electrical</a>
+                        <a href="#">Painting</a>
+                    </div>
+                </div>
+                <div class="category-item font-medium text-gray-700 hover:text-blue-500 transition flex items-center gap-1">
+                    <i class="fas fa-cut"></i> Salon & Spa
+                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                    <div class="submenu p-4">
+                        <a href="#">Haircut</a>
+                        <a href="#">Facial</a>
+                        <a href="#">Massage</a>
+                        <a href="#">Manicure/Pedicure</a>
+                    </div>
+                </div>
+                <div class="category-item font-medium text-gray-700 hover:text-blue-500 transition flex items-center gap-1">
+                    <i class="fas fa-graduation-cap"></i> Learning
+                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                    <div class="submenu p-4">
+                        <a href="#">Tutoring</a>
+                        <a href="#">Language Classes</a>
+                        <a href="#">Music Lessons</a>
+                        <a href="#">Dance Classes</a>
+                    </div>
+                </div>
+                <div class="category-item font-medium text-gray-700 hover:text-blue-500 transition flex items-center gap-1">
+                    <i class="fas fa-stethoscope"></i> Health & Wellness
+                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                    <div class="submenu p-4">
+                        <a href="#">Yoga Trainer</a>
+                        <a href="#">Personal Trainer</a>
+                        <a href="#">Nutritionist</a>
+                        <a href="#">Physiotherapy</a>
+                    </div>
+                </div>
+                <div class="category-item font-medium text-gray-700 hover:text-blue-500 transition flex items-center gap-1">
+                    <i class="fas fa-paint-brush"></i> Design & Creative
+                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                    <div class="submenu p-4">
+                        <a href="#">Logo Design</a>
+                        <a href="#">Web Design</a>
+                        <a href="#">Interior Design</a>
+                        <a href="#">Photography</a>
+                    </div>
+                </div>
+                <div class="category-item font-medium text-gray-700 hover:text-blue-500 transition flex items-center gap-1">
+                    <i class="fas fa-calendar-check"></i> Events
+                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                    <div class="submenu p-4">
+                        <a href="#">Photographer</a>
+                        <a href="#">Catering</a>
+                        <a href="#">DJ Services</a>
+                        <a href="#">Event Planner</a>
+                    </div>
+                </div>
+                <div class="category-item font-medium text-gray-700 hover:text-blue-500 transition flex items-center gap-1">
+                    <i class="fas fa-briefcase"></i> Business
+                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                    <div class="submenu p-4">
+                        <a href="#">Accounting</a>
+                        <a href="#">Legal Services</a>
+                        <a href="#">Consulting</a>
+                        <a href="#">IT Services</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner Slider -->
+    <div class="banner-slider">
+        <div class="slides" id="slides">
+            <div class="slide">
+                <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1400&h=400&fit=crop" alt="Banner 1">
+                <div class="slide-content">
+                    <h2 class="text-4xl font-bold mb-4">Professional Services at Your Doorstep</h2>
+                    <p class="text-xl mb-6">Get quality home services from verified experts</p>
+                    <button class="bg-[#fb641b] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#e55a17] transition">
+                        Book Now
+                    </button>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=1400&h=400&fit=crop" alt="Banner 2">
+                <div class="slide-content">
+                    <h2 class="text-4xl font-bold mb-4">Learn New Skills with Expert Tutors</h2>
+                    <p class="text-xl mb-6">Online & offline classes for all ages</p>
+                    <button class="bg-[#2874f0] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#1e5dc9] transition">
+                        Explore Classes
+                    </button>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1400&h=400&fit=crop" alt="Banner 3">
+                <div class="slide-content">
+                    <h2 class="text-4xl font-bold mb-4">Home Cleaning Services Starting ₹499</h2>
+                    <p class="text-xl mb-6">Deep cleaning by trained professionals</p>
+                    <button class="bg-[#388e3c] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#2e7d32] transition">
+                        Get Started
+                    </button>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1400&h=400&fit=crop" alt="Banner 4">
+                <div class="slide-content">
+                    <h2 class="text-4xl font-bold mb-4">Beauty & Wellness Services</h2>
+                    <p class="text-xl mb-6">Salon services at your convenience</p>
+                    <button class="bg-[#9c27b0] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#7b1fa2] transition">
+                        Book Appointment
+                    </button>
+                </div>
+            </div>
+        </div>
+        <button type="button" title="Previous slide" class="slider-nav prev" onclick="changeSlide(-1)">
+            <i class="fas fa-chevron-left text-gray-600"></i>
+        </button>
+        <button type="button" title="Next slide" class="slider-nav next" onclick="changeSlide(1)">
+            <i class="fas fa-chevron-right text-gray-600"></i>
+        </button>
+        <div class="slider-dots" id="dots">
+            <span class="dot active" onclick="goToSlide(0)"></span>
+            <span class="dot" onclick="goToSlide(1)"></span>
+            <span class="dot" onclick="goToSlide(2)"></span>
+            <span class="dot" onclick="goToSlide(3)"></span>
+        </div>
+    </div>
+
+    <!-- Service Categories Grid -->
+    <div class="bg-gray-100 py-6">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="service-categories">
+                <div class="category-card">
+                    <i class="fas fa-laptop"></i>
+                    <h3>Computer Repair</h3>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-home"></i>
+                    <h3>Home Cleaning</h3>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-wrench"></i>
+                    <h3>Plumbing</h3>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-bolt"></i>
+                    <h3>Electrical</h3>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-cut"></i>
+                    <h3>Salon</h3>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-paint-roller"></i>
+                    <h3>Painting</h3>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-dumbbell"></i>
+                    <h3>Fitness</h3>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-music"></i>
+                    <h3>Music</h3>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-camera"></i>
+                    <h3>Photography</h3>
+                </div>
+                <div class="category-card">
+                    <i class="fas fa-truck"></i>
+                    <h3>Moving</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deals of the Day Section -->
+    <section class="bg-gray-100 py-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="section-header rounded-t-lg">
+                <div>
+                    <h2 class="section-title">Deals of the Day</h2>
+                    <p class="text-sm text-gray-500">Limited time offers</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2 text-sm text-gray-600">
+                        <i class="fas fa-clock"></i>
+                        <span id="countdown">23:45:12</span>
+                    </div>
+                    <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="services-scroll bg-white rounded-b-lg">
+                <div class="service-card" onclick="openModal(' Plumbing Service')">
+                    <div class="service-image gradient-1">
+                        <i class="fas fa-wrench"></i>
+                        <span class="service-badge">60% OFF</span>
+                        <span class="service-discount">₹299</span>
+                    </div>
+                    <div class="service-info">
+                        <h3 class="service-title">Home Plumbing Service</h3>
+                        <p class="service-provider">by QuickFix Pros</p>
+                        <div class="service-rating">
+                            <span class="rating-badge">4.5 <i class="fas fa-star text-xs"></i></span>
+                            <span class="rating-count">(2,456)</span>
+                        </div>
+                        <div class="service-price">
+                            <span class="current-price">₹299</span>
+                            <span class="original-price">₹749</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-card" onclick="openModal(' Hair Styling')">
+                    <div class="service-image gradient-2">
+                        <i class="fas fa-cut"></i>
+                        <span class="service-badge">50% OFF</span>
+                        <span class="service-discount">₹399</span>
+                    </div>
+                    <div class="service-info">
+                        <h3 class="service-title">Unisex Salon Package</h3>
+                        <p class="service-provider">by StyleStudio</p>
+                        <div class="service-rating">
+                            <span class="rating-badge">4.7 <i class="fas fa-star text-xs"></i></span>
+                            <span class="rating-count">(1,892)</span>
+                        </div>
+                        <div class="service-price">
+                            <span class="current-price">₹399</span>
+                            <span class="original-price">₹799</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-card" onclick="openModal(' AC Repair')">
+                    <div class="service-image gradient-3">
+                        <i class="fas fa-snowflake"></i>
+                        <span class="service-badge">40% OFF</span>
+                        <span class="service-discount">₹449</span>
+                    </div>
+                    <div class="service-info">
+                        <h3 class="service-title">AC Service & Repair</h3>
+                        <p class="service-provider">by CoolTech Experts</p>
+                        <div class="service-rating">
+                            <span class="rating-badge">4.3 <i class="fas fa-star text-xs"></i></span>
+                            <span class="rating-count">(3,214)</span>
+                        </div>
+                        <div class="service-price">
+                            <span class="current-price">₹449</span>
+                            <span class="original-price">₹749</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-card" onclick="openModal(' Deep Cleaning')">
+                    <div class="service-image gradient-4">
+                        <i class="fas fa-spray-can"></i>
+                        <span class="service-badge">55% OFF</span>
+                        <span class="service-discount">₹999</span>
+                    </div>
+                    <div class="service-info">
+                        <h3 class="service-title">Deep Home Cleaning</h3>
+                        <p class="service-provider">by CleanHome Services</p>
+                        <div class="service-rating">
+                            <span class="rating-badge">4.6 <i class="fas fa-star text-xs"></i></span>
+                            <span class="rating-count">(4,567)</span>
+                        </div>
+                        <div class="service-price">
+                            <span class="current-price">₹999</span>
+                            <span class="original-price">₹2,199</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-card" onclick="openModal(' Yoga Session')">
+                    <div class="service-image gradient-5">
+                        <i class="fas fa-spa"></i>
+                        <span class="service-badge">30% OFF</span>
+                        <span class="service-discount">₹349</span>
+                    </div>
+                    <div class="service-info">
+                        <h3 class="service-title">Personal Yoga Session</h3>
+                        <p class="service-provider">by ZenFit Academy</p>
+                        <div class="service-rating">
+                            <span class="rating-badge">4.8 <i class="fas fa-star text-xs"></i></span>
+                            <span class="rating-count">(987)</span>
+                        </div>
+                        <div class="service-price">
+                            <span class="current-price">₹349</span>
+                            <span class="original-price">₹499</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-card" onclick="openModal(' Photography')">
+                    <div class="service-image gradient-6">
+                        <i class="fas fa-camera-retro"></i>
+                        <span class="service-badge">45% OFF</span>
+                        <span class="service-discount">₹2,499</span>
+                    </div>
+                    <div class="service-info">
+                        <h3 class="service-title">Wedding Photography</h3>
+                        <p class="service-provider">by ShutterCreek</p>
+                        <div class="service-rating">
+                            <span class="rating-badge">4.9 <i class="fas fa-star text-xs"></i></span>
+                            <span class="rating-count">(567)</span>
+                        </div>
+                        <div class="service-price">
+                            <span class="current-price">₹2,499</span>
+                            <span class="original-price">₹4,499</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-card" onclick="openModal(' Tutoring')">
+                    <div class="service-image gradient-7">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <span class="service-badge">25% OFF</span>
+                        <span class="service-discount">₹199</span>
+                    </div>
+                    <div class="service-info">
+                        <h3 class="service-title">Math Tutoring (Class 1-10)</h3>
+                        <p class="service-provider">by EduFirst</p>
+                        <div class="service-rating">
+                            <span class="rating-badge">4.4 <i class="fas fa-star text-xs"></i></span>
+                            <span class="rating-count">(1,234)</span>
+                        </div>
+                        <div class="service-price">
+                            <span class="current-price">₹199</span>
+                            <span class="original-price">₹299</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Top Services Section -->
+    <section class="bg-gray-100 py-6 mt-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="section-header rounded-t-lg">
+                <div>
+                    <h2 class="section-title">Top Rated Services</h2>
+                    <p class="text-sm text-gray-500">Most popular among customers</p>
+                </div>
+                <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="services-scroll bg-white rounded-b-lg">
+                <div class="service-card" onclick="openModal(' Electrician')">
+                    <div class="service-image gradient-8">
+                        <i class="fas fa-bolt"></i>
+                        <span class="service-badge">TRENDING</span>
+                    </div>
+                    <div class="service-info">
+                        <h3 class="service-title">Electrician Visit</h3>
+                        <p class="service-provider">by PowerPro</p>
+                        <div class="service-rating">
+                            <span class="rating-badge">4.6 <i class="fas fa-star text-xs"></i></span>
+                            <span class="rating-count">(5,678)</span>
+                        </div>
+                        <div class="service-price">
+                            <span class="current-price">₹249</span>
+                            <span class="free-service">Free Installation</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-card" onclick="openModal(' Massage')">
+                    <div class="service-image gradient-9">
+                        <i class="fas fa-hands"></i>
+                        <span class="service-badge">PREMIUM</span>
+                    </div>
+                    <div class="service-info">
+                        <h3 class="service-title">Aromatherapy Massage</h3>
+                        <p class="service-provider">by Serenity Spa</p>
+                        <div class="service-rating">
+                            <span class="rating-badge">4.9 <i class="fas fa-star text-xs"></i></span>
+                            <span class="rating-count">(2,345)</span>
+                        </div>
+                        <div class="service-price">
+                            <span class="current-price">₹899</span>
+                            <span class="original-price">₹1,499</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-card" onclick="openModal(' Web Development')">
+                    <div class="service-image gradient-10">
+                        <i class="fas fa-code"></i>
+                        <span class="service-badge">BESTSELLER</span>
+                    </div>
+                    <div class="service-info">
+                        <h3 class="service-title">Website Development</h3>
+                        <p class="service-provider">by WebCrafters</p>
+                        <div class="service-rating">
+                            <span class="rating-badge">4.7 <i class="fas fa-star text-xs"></i></span>
+                            <span class="rating-count">(1,876)</span>
+                        </div>
+                        <div class="service-price">
+                            <span class="current-price">₹5,999</span>
+                            <span class="original-price">₹12,999</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-card" onclick="openModal(' Carpet Cleaning')">
+                    <div class="service-image gradient-11">
+                        <i class="fas fa-couch"></i>
+                    </div>
+                    <div class="service-info">
+                        <h3 class="service-title">Carpet Cleaning Service</h3>
+                        <p class="service-provider">by FreshCarpet Co.</p>
+                        <div class="service-rating">
+                            <span class="rating-badge">4.4 <i class="fas fa-star text-xs"></i></span>
+                            <span class="rating-count">(876)</span>
+                        </div>
+                        <div class="service-price">
+                            <span class="current-price">₹599</span>
+                            <span class="original-price">₹999</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-card" onclick="openModal(' Chef Service')">
+                    <div class="service-image gradient-12">
+                        <i class="fas fa-utensils"></i>
+                        <span class="service-badge">NEW</span>
+                    </div>
+                    <div class="service-info">
+                        <h3 class="service-title">Personal Chef (4 hours)</h3>
+                        <p class="service-provider">by ChefAtHome</p>
+                        <div class="service-rating">
+                            <span class="rating-badge">4.8 <i class="fas fa-star text-xs"></i></span>
+                            <span class="rating-count">(543)</span>
+                        </div>
+                        <div class="service-price">
+                            <span class="current-price">₹1,999</span>
+                            <span class="original-price">₹3,500</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-card" onclick="openModal(' Dog Grooming')">
+                    <div class="service-image gradient-13">
+                        <i class="fas fa-dog"></i>
+                    </div>
+                    <div class="service-info">
+                        <h3 class="service-title">Pet Grooming Service</h3>
+                        <p class="service-provider">by Paws & Claws</p>
+                        <div class="service-rating">
+                            <span class="rating-badge">4.6 <i class="fas fa-star text-xs"></i></span>
+                            <span class="rating-count">(1,234)</span>
+                        </div>
+                        <div class="service-price">
+                            <span class="current-price">₹699</span>
+                            <span class="original-price">₹1,199</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-card" onclick="openModal(' CCTV Installation')">
+                    <div class="service-image gradient-14">
+                        <i class="fas fa-video"></i>
+                        <span class="service-badge">SECURE</span>
+                    </div>
+                    <div class="service-info">
+                        <h3 class="service-title">CCTV Installation</h3>
+                        <p class="service-provider">by SecureHome</p>
+                        <div class="service-rating">
+                            <span class="rating-badge">4.5 <i class="fas fa-star text-xs"></i></span>
+                            <span class="rating-count">(2,156)</span>
+                        </div>
+                        <div class="service-price">
+                            <span class="current-price">₹1,299</span>
+                            <span class="original-price">₹2,499</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Articles/Blog Section -->
+    <section class="bg-gray-100 py-10 mt-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="section-header rounded-t-lg">
+                <div>
+                    <h2 class="section-title">Latest Articles & Tips</h2>
+                    <p class="text-sm text-gray-500">Insights from our experts</p>
+                </div>
+                <a href="#" class="view-all">View All Articles <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="articles-grid bg-white rounded-b-lg">
+                <div class="article-card">
+                    <div class="article-image">
+                        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=300&fit=crop" alt="Article 1">
+                        <span class="article-category">Home Services</span>
+                    </div>
+                    <div class="article-content">
+                        <h3 class="article-title">10 Essential Home Maintenance Tips Every Homeowner Should Know</h3>
+                        <p class="article-excerpt">Regular maintenance can save you thousands in repairs. Here are the key tasks to keep your home in top condition throughout the year.</p>
+                        <div class="article-meta">
+                            <div class="article-author">
+                                <div class="author-avatar">RK</div>
+                                <div>
+                                    <p class="author-name">Rajesh Kumar</p>
+                                    <p class="read-time">5 min read</p>
+                                </div>
+                            </div>
+                            <span class="text-xs text-gray-400">Dec 15, 2024</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="article-card">
+                    <div class="article-image">
+                        <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&h=300&fit=crop" alt="Article 2">
+                        <span class="article-category">Wellness</span>
+                    </div>
+                    <div class="article-content">
+                        <h3 class="article-title">How Regular Spa Visits Can Improve Your Mental Health</h3>
+                        <p class="article-excerpt">Discover the science-backed benefits of regular spa treatments and how they can help reduce stress and anxiety in your daily life.</p>
+                        <div class="article-meta">
+                            <div class="article-author">
+                                <div class="author-avatar">PS</div>
+                                <div>
+                                    <p class="author-name">Priya Sharma</p>
+                                    <p class="read-time">4 min read</p>
+                                </div>
+                            </div>
+                            <span class="text-xs text-gray-400">Dec 12, 2024</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="article-card">
+                    <div class="article-image">
+                        <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=300&fit=crop" alt="Article 3">
+                        <span class="article-category">Education</span>
+                    </div>
+                    <div class="article-content">
+                        <h3 class="article-title">The Future of Online Learning: Trends to Watch in 2025</h3>
+                        <p class="article-excerpt">From AI-powered tutors to virtual reality classrooms, explore the emerging technologies transforming how we learn and teach.</p>
+                        <div class="article-meta">
+                            <div class="article-author">
+                                <div class="author-avatar">AM</div>
+                                <div>
+                                    <p class="author-name">Amit Mehta</p>
+                                    <p class="read-time">6 min read</p>
+                                </div>
+                            </div>
+                            <span class="text-xs text-gray-400">Dec 10, 2024</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Badges Section -->
+    <section class="bg-blue-50 py-10 mt-4">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-4 gap-8 text-center">
+                <div class="flex flex-col items-center">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md mb-4">
+                        <i class="fas fa-shield-alt text-3xl text-[#2874f0]"></i>
+                    </div>
+                    <h4 class="font-semibold text-gray-800">100% Safe & Secure</h4>
+                    <p class="text-sm text-gray-500 mt-2">All services are verified</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md mb-4">
+                        <i class="fas fa-headset text-3xl text-[#2874f0]"></i>
+                    </div>
+                    <h4 class="font-semibold text-gray-800">24/7 Support</h4>
+                    <p class="text-sm text-gray-500 mt-2">Always here to help you</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md mb-4">
+                        <i class="fas fa-thumbs-up text-3xl text-[#2874f0]"></i>
+                    </div>
+                    <h4 class="font-semibold text-gray-800">Quality Assured</h4>
+                    <p class="text-sm text-gray-500 mt-2">Best-in-class professionals</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md mb-4">
+                        <i class="fas fa-wallet text-3xl text-[#2874f0]"></i>
+                    </div>
+                    <h4 class="font-semibold text-gray-800">Best Prices</h4>
+                    <p class="text-sm text-gray-500 mt-2">Competitive rates guaranteed</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-top">
+            <div class="footer-section footer-about">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="bg-[#2874f0] p-2 rounded">
+                        <span class="text-2xl font-bold text-white">S</span>
+                    </div>
+                    <span class="font-bold text-xl">Servify</span>
+                </div>
+                <p>Servify is your one-stop destination for all service needs. We connect you with verified professionals offering quality services at competitive prices.</p>
+                <div class="social-links mt-4">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h4>Popular Services</h4>
+                <ul>
+                    <li><a href="#">Home Cleaning</a></li>
+                    <li><a href="#">Plumbing Services</a></li>
+                    <li><a href="#">Electrician</a></li>
+                    <li><a href="#">AC Repair</a></li>
+                    <li><a href="#">Salon at Home</a></li>
+                    <li><a href="#">Pest Control</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="#">Partnership</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">FAQs</a></li>
+                    <li><a href="#">Cancellation Policy</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Cookie Policy</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <div class="newsletter">
+                    <h4>Subscribe to Newsletter</h4>
+                    <p class="text-sm text-gray-400 mt-2">Get updates on new services and exclusive offers!</p>
+                    <div class="newsletter-form">
+                        <input type="email" placeholder="Enter your email">
+                        <button>Subscribe</button>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-sm text-gray-400 mb-2">Download our app</p>
+                        <div class="flex gap-2">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" class="h-10">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" class="h-10">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="copyright">
+                <p>© 2024 Servify. All rights reserved. Made with <i class="fas fa-heart text-red-500"></i> in India</p>
+            </div>
+            <div class="payment-methods">
+                <span>Payment Methods:</span>
+                <div class="payment-icons">
+                    <i class="fab fa-cc-visa"></i>
+                    <i class="fab fa-cc-mastercard"></i>
+                    <i class="fab fa-cc-amex"></i>
+                    <i class="fab fa-google-pay"></i>
+                    <i class="fab fa-apple-pay"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Quick View Modal -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div class="flex items-center gap-4 mb-6">
+                <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-wrench text-2xl text-white" id="modalIcon"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800" id="modalTitle">Service Details</h3>
+                    <p class="text-sm text-gray-500">by Servify Verified Pro</p>
+                </div>
+            </div>
+            <div class="mb-6">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="rating-badge">4.5 <i class="fas fa-star text-xs"></i></span>
+                    <span class="text-sm text-gray-500">(2,456 reviews)</span>
+                </div>
+                <p class="text-gray-600 text-sm leading-relaxed">Professional service with 100% satisfaction guarantee. Our expert technicians are trained and background-verified.</p>
+            </div>
+            <div class="flex items-center gap-3 mb-6">
+                <span class="current-price text-2xl">₹299</span>
+                <span class="original-price">₹749</span>
+                <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded">60% OFF</span>
+            </div>
+            <div class="space-y-3 mb-6">
+                <div class="flex items-center gap-2 text-sm text-gray-600">
+                    <i class="fas fa-check-circle text-green-500"></i>
+                    Professional Equipment
+                </div>
+                <div class="flex items-center gap-2 text-sm text-gray-600">
+                    <i class="fas fa-check-circle text-green-500"></i>
+                    7-Day Service Warranty
+                </div>
+                <div class="flex items-center gap-2 text-sm text-gray-600">
+                    <i class="fas fa-check-circle text-green-500"></i>
+                    Trained & Verified Pro
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <button class="flex-1 bg-[#fb641b] text-white py-3 rounded-lg font-semibold hover:bg-[#e55a17] transition">
+                    Book Now
+                </button>
+                <button class="whatsapp-btn">
+                    <i class="fab fa-whatsapp text-xl"></i>
+                    Chat
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Banner Slider
+        let currentSlide = 0;
+        const slides = document.getElementById('slides');
+        const dots = document.querySelectorAll('.dot');
+        const totalSlides = 4;
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide >= totalSlides) currentSlide = 0;
+            if (currentSlide < 0) currentSlide = totalSlides - 1;
+            updateSlider();
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlider();
+        }
+
+        function updateSlider() {
+            slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        // Auto slide
+        setInterval(() => {
+            changeSlide(1);
+        }, 5000);
+
+        // Countdown Timer
+        function updateCountdown() {
+            const now = new Date();
+            const endOfDay = new Date();
+            endOfDay.setHours(23, 59, 59, 999);
+            const diff = endOfDay - now;
+
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('countdown').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Modal Functions
+        function openModal(serviceName) {
+            document.getElementById('modalTitle').textContent = serviceName + ' Details';
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        // Close modal on overlay click
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.service-card, .article-card, .category-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Search functionality
+        document.querySelector('.search-bar input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const searchTerm = this.value.trim();
+                if (searchTerm) {
+                    alert(`Searching for: ${searchTerm}`);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
